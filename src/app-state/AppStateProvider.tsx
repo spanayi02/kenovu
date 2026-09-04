@@ -12,6 +12,7 @@ import {
 import { LocalKenovuRepository } from "@/repository/local/localRepository";
 import type { KenovuRepository } from "@/repository/types";
 import type { DemoMode } from "@/domain/types";
+import { BrandMark } from "@/components/shared/BrandMark";
 
 const DEMO_MODE_KEY = "kenovu:demoMode";
 
@@ -69,8 +70,8 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
 
   if (!isClient) {
     return (
-      <div className="flex min-h-dvh items-center justify-center bg-background">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary-tint border-t-primary" />
+      <div className="flex min-h-dvh items-center justify-center bg-background text-primary">
+        <BrandMark className="h-9 w-9 animate-pulse" />
       </div>
     );
   }

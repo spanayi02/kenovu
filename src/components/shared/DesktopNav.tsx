@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useDemoMode } from "@/app-state/hooks";
+import { BrandMark } from "./BrandMark";
 
 const CUSTOMER_ITEMS = [
   { href: "/discover", label: "Discover", icon: Compass },
@@ -44,7 +45,8 @@ export function DesktopNav({ variant }: { variant: "customer" | "business" }) {
   return (
     <header className="hidden border-b border-border bg-surface md:block">
       <div className="mx-auto flex h-16 max-w-6xl items-center gap-8 px-6">
-        <Link href={home} className="text-[19px] font-extrabold tracking-tight text-primary">
+        <Link href={home} className="flex items-center gap-2 text-[19px] font-extrabold tracking-tight text-primary">
+          <BrandMark />
           Kenovu
         </Link>
 
