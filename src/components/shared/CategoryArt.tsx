@@ -1,23 +1,33 @@
+import Image from "next/image";
 import type { ServiceCategory } from "@/domain/types";
 
-// Deliberately not photography: locally generated compositions per category
-// so the prototype never depends on a third-party image CDN being reachable
-// and never shows a broken-image icon (see /docs/ASSET_SOURCES.md). The
-// motif itself is not decoration — it's the app icon's ring-and-marker
-// device (see public/icons/icon.svg) reused as a literal "time remaining"
-// dial, because the countdown is the one thing that makes a Kenovu slot
-// different from an ordinary booking. Category is read from color alone;
-// the dial stays identical everywhere so it reads as one system.
+// Real photography (Unsplash License — free for commercial use, no
+// attribution required; sources recorded in /docs/ASSET_SOURCES.md) with
+// the app icon's ring-and-marker device kept as a small badge, so the
+// "time remaining" motif still ties every card back to the brand without
+// the whole thumbnail being an abstract shape.
 
-const PALETTES: Record<ServiceCategory, { bg: string; ring: string; faint: string }> = {
-  massage: { bg: "#EAF1EC", ring: "#1F4D3E", faint: "#BFD4C7" },
-  hair: { bg: "#FDECE3", ring: "#C74F21", faint: "#F0BC9E" },
-  nails: { bg: "#F6EFE3", ring: "#8A5A24", faint: "#E3C89A" },
-  beauty: { bg: "#F3EEF6", ring: "#5B3E78", faint: "#CBB6DE" },
+const PHOTO_VARIANTS: Record<ServiceCategory, [string, string]> = {
+  massage: ["/images/services/massage-1.jpg", "/images/services/massage-2.jpg"],
+  hair: ["/images/services/hair-1.jpg", "/images/services/hair-2.jpg"],
+  nails: ["/images/services/nails-1.jpg", "/images/services/nails-2.jpg"],
+  beauty: ["/images/services/beauty-1.jpg", "/images/services/beauty-2.jpg"],
 };
 
-// A small deterministic hash so the same imageKey always renders the same
-// dial (no Math.random flicker between renders).
+const OBJECT_POSITION: Record<ServiceCategory, [string, string]> = {
+  massage: ["center 30%", "center 35%"],
+  hair: ["center 35%", "center 30%"],
+  nails: ["center 55%", "center 50%"],
+  beauty: ["center 45%", "center 55%"],
+};
+
+const RING_COLOR: Record<ServiceCategory, string> = {
+  massage: "#1F4D3E",
+  hair: "#C74F21",
+  nails: "#8A5A24",
+  beauty: "#5B3E78",
+};
+
 function hashKey(key: string): number {
   let h = 0;
   for (let i = 0; i < key.length; i++) h = (h * 31 + key.charCodeAt(i)) >>> 0;
@@ -39,54 +49,47 @@ export function CategoryArt({
   imageKey: string;
   className?: string;
 }) {
-  const palette = PALETTES[category];
   const h = hashKey(imageKey);
+  const variant = h % 2;
+  const photoSrc = PHOTO_VARIANTS[category][variant];
+  const objectPosition = OBJECT_POSITION[category][variant];
 
-  // The arc represents time already elapsed toward the appointment — never
-  // a full circle (that would read as "expired"), never near-empty (every
-  // slot has *some* window left). The marker dot sits at the arc's leading
-  // edge, exactly where the app icon places its ember dot.
-  const cx = 50;
-  const cy = 50;
-  const r = 34;
-  const startAngle = -Math.PI / 2; // 12 o'clock
-  const sweep = (0.3 + ((h % 100) / 100) * 0.45) * TAU; // 30%-75% of the dial
+  const cx = 20;
+  const cy = 20;
+  const r = 13;
+  const startAngle = -Math.PI / 2;
+  const sweep = (0.3 + ((h % 100) / 100) * 0.45) * TAU;
   const endAngle = startAngle + sweep;
   const large = sweep > Math.PI ? 1 : 0;
   const start = pointOnCircle(cx, cy, r, startAngle);
   const end = pointOnCircle(cx, cy, r, endAngle);
-  const marker = pointOnCircle(cx, cy, r, endAngle);
-  const tickAngle = startAngle + ((h >> 5) % 5) * (sweep / 5);
-  const tick = pointOnCircle(cx, cy, r, tickAngle);
-  const tickInner = pointOnCircle(cx, cy, r - 7, tickAngle);
 
   return (
-    <svg
-      viewBox="0 0 100 100"
-      className={className}
-      preserveAspectRatio="xMidYMid meet"
-      role="img"
-      aria-label={`${category} — appointment countdown`}
-    >
-      <rect width="100" height="100" fill={palette.bg} />
-      <circle cx={cx} cy={cy} r={r} fill="none" stroke={palette.faint} strokeWidth="2" />
-      <line
-        x1={tickInner.x}
-        y1={tickInner.y}
-        x2={tick.x}
-        y2={tick.y}
-        stroke={palette.faint}
-        strokeWidth="2"
-        strokeLinecap="round"
+    <div className={className} style={{ position: "relative", overflow: "hidden" }}>
+      <Image
+        src={photoSrc}
+        alt={`${category} service`}
+        fill
+        sizes="(min-width: 768px) 220px, 96px"
+        className="object-cover"
+        style={{ objectPosition }}
       />
-      <path
-        d={`M ${start.x} ${start.y} A ${r} ${r} 0 ${large} 1 ${end.x} ${end.y}`}
-        fill="none"
-        stroke={palette.ring}
-        strokeWidth="6"
-        strokeLinecap="round"
-      />
-      <circle cx={marker.x} cy={marker.y} r="4.5" fill="#E1622F" />
-    </svg>
+      <svg
+        viewBox="0 0 40 40"
+        className="absolute bottom-1.5 right-1.5 h-7 w-7 drop-shadow-md"
+        aria-hidden="true"
+      >
+        <circle cx="20" cy="20" r="17" fill="white" fillOpacity="0.88" />
+        <circle cx={cx} cy={cy} r={r} fill="none" stroke="#E7E2D5" strokeWidth="2.4" />
+        <path
+          d={`M ${start.x} ${start.y} A ${r} ${r} 0 ${large} 1 ${end.x} ${end.y}`}
+          fill="none"
+          stroke={RING_COLOR[category]}
+          strokeWidth="2.6"
+          strokeLinecap="round"
+        />
+        <circle cx={end.x} cy={end.y} r="2" fill="#E1622F" />
+      </svg>
+    </div>
   );
 }

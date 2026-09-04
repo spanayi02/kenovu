@@ -2,22 +2,35 @@
 
 ## Photography
 
-Service/business imagery uses Unsplash source photos (free for commercial
-use, no attribution required per Unsplash's license — see
-`/docs/RESEARCH.md`). Because this environment has no outbound access to
-fetch and persist binary images into the repo at build time in a reliable,
-license-traceable way, the prototype ships with **locally generated SVG
-placeholder imagery** (per-category abstract compositions — massage, nails,
-hair, beauty — in the brand palette) instead of hot-linked photography, so
-the app never depends on a third-party image CDN being reachable, never
-shows a broken-image icon if the network is unavailable, and never risks
-using an untraceable photo. This is a deliberate prototype trade-off, not a
-production recommendation.
+Service card/hero imagery is real photography, downloaded from Unsplash and
+committed locally under `public/images/services/` — not hot-linked, so the
+app never depends on a third-party CDN being reachable at runtime and never
+shows a broken-image icon. Two variants per category (picked deterministically
+per business so the same business always shows the same photo, and
+businesses in the same category don't all show an identical image). Unsplash
+License: free for commercial use, no attribution required — see
+`/docs/RESEARCH.md`.
 
-**Before showing Kenovu to real businesses**, swap
-`public/images/services/*` and `public/images/businesses/*` for real
-licensed photography (Unsplash direct downloads, credited per-file in this
-document, or the business's own photos once businesses are onboarded).
+| File | Category | Source |
+|---|---|---|
+| `massage-1.jpg` | Massage | https://unsplash.com/photos/nMVUTY8_gGw |
+| `massage-2.jpg` | Massage | https://unsplash.com/photos/SMwCQZWayj0 |
+| `hair-1.jpg` | Hair | https://unsplash.com/photos/wSpkThmoZQc |
+| `hair-2.jpg` | Hair | https://unsplash.com/photos/Xr12kfinkYA |
+| `nails-1.jpg` | Nails | https://unsplash.com/photos/vtQHwU4F13s |
+| `nails-2.jpg` | Nails | https://unsplash.com/photos/gb6gtiTZKB8 |
+| `beauty-1.jpg` | Beauty | https://unsplash.com/photos/CqEGy4zAmbI |
+| `beauty-2.jpg` | Beauty | https://unsplash.com/photos/u93nTfWqR9w |
+
+A small ring-and-marker badge (the app icon's device, see
+`src/components/shared/BrandMark.tsx` and `CategoryArt.tsx`) is drawn on top
+of each photo — real photography for premium feel, the brand's own
+countdown motif kept as a small consistent accent rather than replaced
+outright.
+
+**Before showing Kenovu to real businesses**, ideally swap these for the
+business's own photos once they're onboarded — stock photography is a
+prototype stand-in, not a long-term identity.
 
 ## Icons
 
