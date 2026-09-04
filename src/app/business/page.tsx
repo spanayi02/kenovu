@@ -18,6 +18,7 @@ import { CURRENT_BUSINESS_ID } from "@/domain/constants";
 import { calculateBusinessMetrics } from "@/domain/businessMetrics";
 import { formatPrice } from "@/domain/pricing";
 import { isWithinBucket } from "@/domain/time";
+import { cn } from "@/lib/utils";
 
 export default function BusinessTodayPage() {
   const business = useBusiness(CURRENT_BUSINESS_ID);
@@ -47,9 +48,13 @@ export default function BusinessTodayPage() {
       <ScreenHeader title="Today" subtitle={business.name} />
       <div className="mx-auto max-w-6xl px-4 pt-4 pb-8">
         <div className="md:max-w-2xl">
-          <div className="grid grid-cols-3 gap-2.5">
+          <div className="flex divide-x divide-border rounded-[var(--radius-lg)] border border-border bg-surface">
             <StatTile label="Kenovu bookings" value={String(metrics.bookingCount)} />
-            <StatTile label="Revenue recovered" value={formatPrice(metrics.revenueRecovered)} />
+            <StatTile
+              label="Revenue recovered"
+              value={formatPrice(metrics.revenueRecovered)}
+              tone="accent"
+            />
             <StatTile label="Empty time filled" value={`${metrics.emptyTimeFilledHours}h`} />
           </div>
 
@@ -125,11 +130,21 @@ export default function BusinessTodayPage() {
   );
 }
 
-function StatTile({ label, value }: { label: string; value: string }) {
+function StatTile({
+  label,
+  value,
+  tone = "default",
+}: {
+  label: string;
+  value: string;
+  tone?: "default" | "accent";
+}) {
   return (
-    <div className="rounded-[var(--radius-lg)] border border-border bg-surface p-3">
-      <p className="text-lg font-bold text-foreground">{value}</p>
-      <p className="text-[11.5px] leading-snug text-muted-foreground">{label}</p>
+    <div className="flex-1 px-3.5 py-3">
+      <p className={cn("text-xl font-bold", tone === "accent" ? "text-accent" : "text-foreground")}>
+        {value}
+      </p>
+      <p className="mt-0.5 text-[11px] uppercase tracking-wide text-muted-foreground">{label}</p>
     </div>
   );
 }
