@@ -20,8 +20,12 @@ export default function BusinessBookingsPage() {
 
   return (
     <div>
-      <ScreenHeader title="Bookings" subtitle={bookings.length > 0 ? `${bookings.length} total` : undefined} />
-      <div className="mx-auto max-w-6xl px-4 pt-4 pb-8">
+      <ScreenHeader
+        title="Bookings"
+        subtitle={bookings.length > 0 ? `${bookings.length} total` : undefined}
+        dense
+      />
+      <div className="mx-auto max-w-5xl px-4 pt-4 pb-8">
         {sorted.length === 0 ? (
           <EmptyState
             icon={CalendarCheck}
@@ -29,27 +33,27 @@ export default function BusinessBookingsPage() {
             description="Bookings will appear here as soon as a customer books one of your slots."
           />
         ) : (
-          <div className="grid grid-cols-1 gap-2.5 md:grid-cols-2 xl:grid-cols-3">
+          <div className="grid grid-cols-1 gap-2.5 md:grid-cols-2">
             {sorted.map((booking) => {
               const service = serviceMap.get(booking.serviceId);
               return (
                 <div
                   key={booking.id}
-                  className="rounded-[var(--radius-lg)] border border-border bg-surface p-4"
+                  className="overflow-hidden rounded-[var(--radius-md)] border border-border bg-surface"
                 >
-                  <div className="flex items-start justify-between gap-3">
+                  <div className="flex items-start justify-between gap-3 p-3.5">
                     <div>
-                      <p className="text-[15px] font-semibold text-foreground">{service?.name}</p>
-                      <p className="text-[13.5px] text-muted-foreground">
+                      <p className="text-[14px] font-semibold text-foreground">{service?.name}</p>
+                      <p className="text-[12.5px] text-muted-foreground">
                         {formatDateTimeLabel(booking.startTime)} · {booking.customerName}
                       </p>
                     </div>
-                    <span className="text-[15px] font-semibold text-foreground">
+                    <span className="tabular-nums text-[14px] font-semibold text-foreground">
                       {formatPrice(booking.pricePaid)}
                     </span>
                   </div>
-                  <div className="mt-3 flex items-center justify-between border-t border-border pt-2.5 text-[12.5px] text-muted-foreground">
-                    <span>Kenovu commission ({formatPrice(booking.commission)})</span>
+                  <div className="flex items-center justify-between border-t border-border bg-surface-muted px-3.5 py-2 text-[12px] tabular-nums text-muted-foreground">
+                    <span>Commission ({formatPrice(booking.commission)})</span>
                     <span className="font-medium text-success">
                       You receive {formatPrice(booking.businessPayout)}
                     </span>

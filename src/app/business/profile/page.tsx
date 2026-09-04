@@ -21,7 +21,7 @@ export default function BusinessProfilePage() {
 
   return (
     <div>
-      <ScreenHeader title="Business" />
+      <ScreenHeader title="Business" dense />
       <div className="mx-auto max-w-xl px-4 pt-4 pb-10">
         <div className="rounded-[var(--radius-lg)] border border-border bg-surface p-4">
           <p className="text-lg font-bold text-foreground">{business.name}</p>

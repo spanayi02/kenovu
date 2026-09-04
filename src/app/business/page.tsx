@@ -45,10 +45,10 @@ export default function BusinessTodayPage() {
 
   return (
     <div>
-      <ScreenHeader title="Today" subtitle={business.name} />
-      <div className="mx-auto max-w-6xl px-4 pt-4 pb-8">
+      <ScreenHeader title="Today" subtitle={business.name} dense />
+      <div className="mx-auto max-w-5xl px-4 pt-4 pb-8">
         <div className="md:max-w-2xl">
-          <div className="flex divide-x divide-border rounded-[var(--radius-lg)] border border-border bg-surface">
+          <div className="flex divide-x divide-border rounded-[var(--radius-md)] border border-border bg-surface">
             <StatTile label="Kenovu bookings" value={String(metrics.bookingCount)} />
             <StatTile
               label="Revenue recovered"
@@ -89,7 +89,7 @@ export default function BusinessTodayPage() {
               }
             />
           ) : (
-            <div className="grid grid-cols-1 gap-2.5 md:grid-cols-2 xl:grid-cols-3">
+            <div className="grid grid-cols-1 gap-2.5 md:grid-cols-2">
               {todaysActive.map((slot) => {
                 const service = serviceMap.get(slot.serviceId);
                 if (!service) return null;
@@ -109,7 +109,7 @@ export default function BusinessTodayPage() {
         {todaysBooked.length > 0 && (
           <section className="mt-6">
             <h2 className="mb-2.5 text-[15px] font-semibold text-foreground">Booked today</h2>
-            <div className="grid grid-cols-1 gap-2.5 md:grid-cols-2 xl:grid-cols-3">
+            <div className="grid grid-cols-1 gap-2.5 md:grid-cols-2">
               {todaysBooked.map((slot) => {
                 const service = serviceMap.get(slot.serviceId);
                 if (!service) return null;
@@ -141,7 +141,7 @@ function StatTile({
 }) {
   return (
     <div className="flex-1 px-3.5 py-3">
-      <p className={cn("text-xl font-bold", tone === "accent" ? "text-accent" : "text-foreground")}>
+      <p className={cn("text-xl font-bold tabular-nums", tone === "accent" ? "text-accent" : "text-foreground")}>
         {value}
       </p>
       <p className="mt-0.5 text-[11px] uppercase tracking-wide text-muted-foreground">{label}</p>

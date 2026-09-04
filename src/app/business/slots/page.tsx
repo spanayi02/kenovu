@@ -39,8 +39,8 @@ export default function BusinessSlotsPage() {
 
   return (
     <div>
-      <ScreenHeader title="Slots" />
-      <div className="mx-auto max-w-6xl px-4 pt-4 pb-8">
+      <ScreenHeader title="Slots" dense />
+      <div className="mx-auto max-w-5xl px-4 pt-4 pb-8">
         <div className="no-scrollbar flex gap-1.5 overflow-x-auto rounded-full bg-surface-muted p-1 md:w-fit">
           {TABS.map((t) => {
             const count = slots.filter((s) => s.status === t.id).length;
@@ -72,7 +72,7 @@ export default function BusinessSlotsPage() {
             }
           />
         ) : (
-          <div className="mt-4 grid grid-cols-1 gap-2.5 md:grid-cols-2 xl:grid-cols-3">
+          <div className="mt-4 grid grid-cols-1 gap-2.5 md:grid-cols-2">
             {filtered.map((slot) => {
               const service = serviceMap.get(slot.serviceId);
               if (!service) return null;
