@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Kenovu — Last-minute appointments",
+    name: "Kenovu - Last-minute appointments",
     short_name: "Kenovu",
     description:
       "Discover local hair, nail, beauty and massage appointments available today at last-minute prices in Nicosia.",

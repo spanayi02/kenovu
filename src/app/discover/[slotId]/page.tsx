@@ -117,8 +117,8 @@ export default function SlotDetailsPage({
         <div className="mt-5 flex items-start gap-2.5 rounded-[var(--radius-lg)] border border-border p-4">
           <ShieldCheck className="mt-0.5 h-4.5 w-4.5 shrink-0 text-primary" />
           <p className="text-[13.5px] leading-relaxed text-muted-foreground">
-            Pay the Kenovu price shown, no extra booking fee. This is a last-minute slot — please
-            arrive on time as the appointment cannot be rescheduled through Kenovu.
+            Pay the Kenovu price shown, no extra booking fee. This is a last-minute slot, so
+            please arrive on time. The appointment cannot be rescheduled through Kenovu.
           </p>
         </div>
 

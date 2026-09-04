@@ -47,7 +47,7 @@ export default function DiscoverPage() {
           <EmptyState
             icon={SearchX}
             title="No Kenovu Slots match your filters right now."
-            description="Try widening your filters or check back a little later — new slots appear as businesses publish them."
+            description="Try widening your filters or check back a little later. New slots appear as businesses publish them."
             action={
               <Button variant="secondary" size="sm" onClick={() => setFilters(DEFAULT_FILTERS)}>
                 Clear filters
