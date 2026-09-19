@@ -103,3 +103,50 @@ Fixed during this pass:
    "Keep browsing" action.
 6. `playwright.config.ts` required a `PW_CHROMIUM_PATH` env var to find the
    sandbox's Chromium build; it now falls back to the known paths.
+
+## Design-director polish pass (2026-09-19)
+
+Run with the `impeccable` skill in Operate mode against the production
+build, inspected at 390x844 and 1280x900 in one batched round, fixed in one
+batch, confirmed in a second round.
+
+| Check | Result |
+|---|---|
+| typecheck / lint / build | Pass |
+| Vitest domain tests | 30/30 |
+| Playwright E2E | 6/6 |
+| Mechanical design detector (`impeccable detect`) | 0 findings |
+| Console errors across the customer and business paths | 0 |
+
+Defects found and fixed (rationale in `/docs/DESIGN_DECISIONS.md`
+§ "Design-director polish pass"):
+
+1. **Contrast failure.** White text on the ember accent was 3.51:1 — below
+   AA for the primary Book CTA and the discount chip. Accent darkened to
+   `#B9481C`; the whole accent family now clears 4.5:1 on every surface it
+   is used on.
+2. **Page-load choreography** on three list screens, removed.
+3. **Bounce easing** on the confirm sheet, replaced with a decelerating
+   curve plus a blur resolve.
+4. **A kicker** ("HAIR") above the slot title, removed.
+5. **A progress ring drawn from a hash**, not from the countdown it
+   implied, removed from every thumbnail.
+6. **A 4px colour stripe** on business slot rows duplicating the status
+   word, removed.
+7. **The same action twice in two colours** on the business Today screen
+   (banner + tab-bar button), reduced to one, in the primary colour.
+8. **Two filter rows at identical weight** with no signal that they were
+   different axes, given a hierarchy.
+9. **A full-width ghost button** that rendered as floating text
+   ("Keep browsing"), made a real link.
+10. **Uppercase tracked stat labels wrapping** into two smeared lines at
+    390px, set in sentence case.
+11. **Unthemed browser surfaces** (caret, focus ring, scrollbar, underline
+    offset, tabular numerals), drawn from the palette.
+12. **Missing `role="alert"`** on the booking error and `aria-busy` on the
+    confirming button.
+
+Known, accepted: the slot detail screen has generous empty space below the
+policy block on a short phone. Filling it would mean adding a map, reviews
+or stats the prototype does not actually have — filler content is worse
+than whitespace.

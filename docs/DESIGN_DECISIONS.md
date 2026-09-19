@@ -124,3 +124,57 @@ screen invents its own timing, blur or shadow:
 `prefers-contrast: more` restores hard edges and darkens muted text.
 Pinch-zoom was re-enabled — locking it is the usual way to make a PWA
 "feel native" and it takes zoom away from anyone who needs it.
+
+## Design-director polish pass
+
+A pass over the whole rebrand looking for the things that survive a
+rebuild but not a review.
+
+**Ember was failing contrast.** The old `#E1622F` gave white-on-accent
+3.51:1, so every filled accent control — the Book CTA, the `-40%` chip —
+failed AA for normal text, and small accent text on cream was borderline.
+The accent is now `#B9481C` (hover `#9E3A14`), the lightest ember that
+clears 4.5:1 on cream, white, the muted surface and its own tint, with
+white on it at 5.24:1. It reads richer on warm cream than the brighter
+orange did, so nothing was lost.
+
+**One authored moment, not a load performance.** The staggered card
+entrances on Discover, Bookings and Saved were removed. A product screen
+loads into a task; making the user watch a list assemble on every
+navigation is choreography charged to them. Motion is now reserved for the
+one place it reports state — the confirm sheet arriving over the slot it
+covers (and the booking confirmation that follows). The sheet also lost its
+overshoot: it is opened by a tap, not thrown by a finger, so bounce there
+was decoration. It resolves out of blur as it rises instead, which reads as
+a material coming into focus rather than a rectangle fading in.
+
+**The category kicker above the slot title is gone.** "HAIR" over
+"Balayage" told the reader nothing the photograph and the service name had
+not already said. A kicker is a label standing where the heading's own
+weight should be.
+
+**The fake countdown ring came off the thumbnails.** See
+`/docs/ASSET_SOURCES.md` — an arc drawn from a hash is a progress ring
+pretending to be data.
+
+**The colour stripe came off the business slot rows.** The status is
+already stated in words, in the status colour; a 4px coloured edge was the
+same information wearing a costume.
+
+**One action, one colour, one place.** The business Today screen carried a
+full-width green "Create Kenovu Slot" banner *and* an ember button in the
+tab bar — the same action twice, in two colours, on the same screen. The
+banner is gone (the tab bar button is always visible anyway) and the button
+is green, because ember means price and savings in this brand, not
+"primary action". The one documented exception is the saved-business heart,
+which stays ember: a green filled heart reads as a different affordance
+entirely.
+
+**The two filter rows now look like two different things.** Category chips
+and quick filters were the same pill at the same weight, so nothing said
+they were different axes. Categories stay raised; quick filters sit
+recessed and smaller behind them.
+
+**Browser-owned surfaces are themed.** Selection, caret, focus ring,
+scrollbar, underline offset and tabular numerals all ship with a default
+that belongs to no design system. They are now drawn from the palette.

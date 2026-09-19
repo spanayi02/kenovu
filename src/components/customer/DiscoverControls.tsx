@@ -25,10 +25,15 @@ const SORT_OPTIONS: { id: SortOption; label: string }[] = [
 function Chip({
   active,
   onClick,
+  tier = "primary",
   children,
 }: {
   active: boolean;
   onClick: () => void;
+  /** "primary" is the category axis — raised. "secondary" is the quick
+   * filters, which sit flat so the two rows don't read as one long list of
+   * equally important options. */
+  tier?: "primary" | "secondary";
   children: React.ReactNode;
 }) {
   return (
@@ -37,11 +42,14 @@ function Chip({
       onClick={onClick}
       aria-pressed={active}
       className={cn(
-        "press inline-flex h-10 shrink-0 items-center rounded-full px-3.5 text-[13.5px] font-semibold",
+        "press inline-flex shrink-0 items-center rounded-full",
         "transition-[background-color,color,box-shadow] duration-[var(--dur-fast)] ease-[var(--ease-app)]",
-        active
-          ? "bg-primary text-primary-foreground shadow-e1"
-          : "bg-surface text-foreground shadow-e1 hover:bg-surface-muted",
+        tier === "primary" ? "h-10 px-3.5 text-[13.5px] font-semibold" : "h-9 px-3 text-[13px] font-medium",
+        active && tier === "primary" && "bg-primary text-primary-foreground shadow-e1",
+        active && tier === "secondary" && "bg-primary-tint text-primary",
+        !active && tier === "primary" && "bg-surface text-foreground shadow-e1 hover:bg-surface-muted",
+        !active && tier === "secondary" &&
+          "bg-surface-muted text-muted-foreground hover:text-foreground",
       )}
     >
       {children}
@@ -102,13 +110,18 @@ export function DiscoverControls({
 
       <div className="no-scrollbar -mx-4 flex items-center gap-2 overflow-x-auto px-4">
         {QUICK_FILTERS.map((qf) => (
-          <Chip key={qf.id} active={filters.quickFilters.includes(qf.id)} onClick={() => toggleQuick(qf.id)}>
+          <Chip
+            key={qf.id}
+            tier="secondary"
+            active={filters.quickFilters.includes(qf.id)}
+            onClick={() => toggleQuick(qf.id)}
+          >
             {qf.label}
           </Chip>
         ))}
         <div className="mx-1 h-5 w-px shrink-0 bg-border" />
-        <label className="press inline-flex h-10 shrink-0 items-center gap-1.5 rounded-full bg-surface px-3 text-[13.5px] font-semibold text-foreground shadow-e1">
-          <SlidersHorizontal className="h-4 w-4 text-muted-foreground" />
+        <label className="press inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full bg-surface-muted px-3 text-[13px] font-medium text-foreground">
+          <SlidersHorizontal className="h-3.5 w-3.5 text-muted-foreground" />
           <select
             value={filters.sort}
             onChange={(e) => onChange({ ...filters, sort: e.target.value as SortOption })}

@@ -55,7 +55,7 @@ export default function DiscoverPage() {
             }
           />
         ) : (
-          <div className="stagger mt-3 grid grid-cols-1 gap-2.5 pb-8 md:grid-cols-2 xl:grid-cols-3">
+          <div className="mt-3 grid grid-cols-1 gap-2.5 pb-8 md:grid-cols-2 xl:grid-cols-3">
             {results.map(({ slot, business, service }, index) => (
               <SlotCard
                 key={slot.id}

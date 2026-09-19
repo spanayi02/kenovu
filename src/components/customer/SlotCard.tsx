@@ -29,7 +29,7 @@ export function SlotCard({
   const discount = calculateDiscountPercentage(slot.normalPrice, slot.kenovuPrice);
 
   return (
-    <div className="animate-rise relative">
+    <div className="relative">
       {/* The favorite button is a sibling, not a descendant, of the link —
           nesting a <button> inside an <a> is invalid HTML and pollutes the
           link's accessible name with the button's label. */}
@@ -55,7 +55,6 @@ export function SlotCard({
             category={business.category}
             imageKey={business.imageKey}
             className="h-full w-full"
-            badge="none"
             priority={priority}
           />
           {discount > 0 && (

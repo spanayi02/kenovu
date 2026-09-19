@@ -17,7 +17,7 @@ import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/shared/EmptyState";
 import { canBookSlot } from "@/domain/rules";
 import { formatCountdown, formatDateTimeLabel } from "@/domain/time";
-import { CATEGORY_LABELS, CURRENT_CUSTOMER } from "@/domain/constants";
+import { CURRENT_CUSTOMER } from "@/domain/constants";
 import { cn } from "@/lib/utils";
 import { calculateDiscountPercentage, formatPrice } from "@/domain/pricing";
 
@@ -71,7 +71,6 @@ export default function SlotDetailsPage({
           className="h-full w-full"
           sizes="100vw"
           priority
-          badge="none"
         />
         {/* Scrim only at the top, where the floating controls sit — a
             full-height gradient would grey out the photograph. */}
@@ -102,12 +101,9 @@ export default function SlotDetailsPage({
         </div>
       </div>
 
-      <div className="animate-sheet relative -mt-6 rounded-t-[var(--radius-xl)] bg-background pt-5">
+      <div className="relative -mt-6 rounded-t-[var(--radius-xl)] bg-background pt-5">
         <div className="mx-auto max-w-xl px-4">
-          <p className="t-overline text-muted-foreground">
-            {CATEGORY_LABELS[service.category]}
-          </p>
-          <h1 className="t-title mt-1 text-foreground">{service.name}</h1>
+          <h1 className="t-title text-foreground">{service.name}</h1>
 
           <p className="t-body mt-1.5 font-semibold text-primary">{business.name}</p>
           <div className="t-subhead mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-muted-foreground">

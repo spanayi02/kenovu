@@ -84,16 +84,19 @@ export default function BookingDetailPage({
           </p>
         )}
 
-        <Button variant="secondary" size="lg" className="mt-5 w-full gap-2">
+        <Button variant="secondary" size="lg" className="mt-6 w-full gap-2">
           <CalendarPlus className="h-4.5 w-4.5" />
           Add to calendar
         </Button>
 
-        <Link href="/discover" className="mt-2.5 block">
-          <Button variant="ghost" size="lg" className="w-full">
+        <div className="mt-5 text-center">
+          <Link
+            href="/discover"
+            className="t-subhead press inline-flex h-11 items-center font-semibold text-primary underline"
+          >
             Keep browsing
-          </Button>
-        </Link>
+          </Link>
+        </div>
       </div>
     </div>
   );

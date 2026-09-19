@@ -111,7 +111,10 @@ export function ConfirmBookingPanel({ slotId }: { slotId: string }) {
         </p>
 
         {state === "error" && (
-          <div className="t-subhead mt-3 rounded-[var(--radius-md)] bg-danger-tint px-3.5 py-3 text-danger">
+          <div
+            role="alert"
+            className="t-subhead mt-3 rounded-[var(--radius-md)] bg-danger-tint px-3.5 py-3 text-danger"
+          >
             {errorMessage}
           </div>
         )}
@@ -123,6 +126,7 @@ export function ConfirmBookingPanel({ slotId }: { slotId: string }) {
           variant="accent"
           className="w-full"
           disabled={!bookCheck.valid || state === "processing"}
+          aria-busy={state === "processing"}
           onClick={handleConfirm}
         >
           {state === "processing"

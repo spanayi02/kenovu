@@ -58,7 +58,7 @@ export default function BookingsPage() {
             description={tab === "upcoming" ? "Book a last-minute slot from Discover." : undefined}
           />
         ) : (
-          <div className="stagger mt-4 grid grid-cols-1 gap-2.5 pb-8 md:grid-cols-2 xl:grid-cols-3">
+          <div className="mt-4 grid grid-cols-1 gap-2.5 pb-8 md:grid-cols-2 xl:grid-cols-3">
             {items.map((booking) => (
               <BookingRow key={booking.id} booking={booking} />
             ))}
@@ -77,7 +77,7 @@ function BookingRow({ booking }: { booking: Booking }) {
   return (
     <Link
       href={`/bookings/${booking.id}`}
-      className="press-soft animate-rise flex items-center justify-between gap-3 rounded-[var(--radius-lg)] bg-surface p-4 shadow-e1"
+      className="press-soft flex items-center justify-between gap-3 rounded-[var(--radius-lg)] bg-surface p-4 shadow-e1"
     >
       <div className="min-w-0">
         <p className="t-headline truncate text-foreground">{business?.name}</p>

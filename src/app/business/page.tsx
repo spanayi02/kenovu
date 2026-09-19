@@ -2,7 +2,7 @@
 
 import { useMemo } from "react";
 import Link from "next/link";
-import { Plus, Sparkles } from "lucide-react";
+import { Sparkles } from "lucide-react";
 import { ScreenHeader } from "@/components/shared/ScreenHeader";
 import { EmptyState } from "@/components/shared/EmptyState";
 import { Button } from "@/components/ui/Button";
@@ -49,34 +49,19 @@ export default function BusinessTodayPage() {
       <div className="mx-auto max-w-5xl px-4 pt-4 pb-8">
         <div className="md:max-w-2xl">
           <div className="flex divide-x divide-border rounded-[var(--radius-md)] border border-border bg-surface">
-            <StatTile label="Kenovu bookings" value={String(metrics.bookingCount)} />
+            <StatTile label="Bookings" value={String(metrics.bookingCount)} />
             <StatTile
-              label="Revenue recovered"
+              label="Recovered"
               value={formatPrice(metrics.revenueRecovered)}
               tone="accent"
             />
-            <StatTile label="Empty time filled" value={`${metrics.emptyTimeFilledHours}h`} />
+            <StatTile label="Time filled" value={`${metrics.emptyTimeFilledHours}h`} />
           </div>
 
-          <Link
-            href="/business/create"
-            data-testid="create-slot-cta"
-            className="press-soft mt-4 flex items-center justify-between gap-3 rounded-[var(--radius-lg)] bg-primary px-4 py-4 text-primary-foreground shadow-e2 md:hidden"
-          >
-            <div className="flex items-center gap-3">
-              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white/15">
-                <Plus className="h-5 w-5" />
-              </span>
-              <div>
-                <p className="text-[15px] font-semibold">Create Kenovu Slot</p>
-                <p className="text-[13px] text-primary-foreground/80">Publish an empty appointment</p>
-              </div>
-            </div>
-          </Link>
         </div>
 
         <section className="mt-6">
-          <h2 className="mb-2.5 text-[15px] font-semibold text-foreground">Today&apos;s Kenovu Slots</h2>
+          <h2 className="t-headline mb-2.5 text-foreground">Today&apos;s Kenovu Slots</h2>
           {todaysActive.length === 0 ? (
             <EmptyState
               icon={Sparkles}
@@ -141,10 +126,10 @@ function StatTile({
 }) {
   return (
     <div className="flex-1 px-3.5 py-3">
-      <p className={cn("text-xl font-bold tabular-nums", tone === "accent" ? "text-accent" : "text-foreground")}>
+      <p className={cn("text-[22px] font-extrabold tabular-nums tracking-[-0.02em]", tone === "accent" ? "text-accent" : "text-foreground")}>
         {value}
       </p>
-      <p className="mt-0.5 text-[11px] uppercase tracking-wide text-muted-foreground">{label}</p>
+      <p className="t-caption mt-1 text-muted-foreground">{label}</p>
     </div>
   );
 }

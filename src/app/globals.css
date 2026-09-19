@@ -28,8 +28,8 @@
   --primary-foreground: #ffffff;
   --primary-tint: #e7efe9;
 
-  --accent: #e1622f;
-  --accent-hover: #c74f21;
+  --accent: #b9481c;
+  --accent-hover: #9e3a14;
   --accent-foreground: #ffffff;
   --accent-tint: #fdece3;
 
@@ -50,7 +50,6 @@
      gently overshooting curve reserved for motion the finger started.
      Durations are named by intent so nothing hand-picks a number. */
   --ease-out-app: cubic-bezier(0.32, 0.72, 0, 1);
-  --ease-spring: cubic-bezier(0.34, 1.26, 0.64, 1);
   --dur-press: 120ms; /* tap feedback — must beat perception */
   --dur-fast: 180ms; /* state changes, tints, chips */
   --dur-base: 260ms; /* entrances, reveals */
@@ -121,7 +120,6 @@
   --shadow-e4: var(--shadow-4);
 
   --ease-app: var(--ease-out-app);
-  --ease-spring: var(--ease-spring);
 }
 
 * {
@@ -168,9 +166,64 @@ textarea {
   user-select: auto;
 }
 
+/* ---------------------------------------------------------------------------
+   Browser surfaces
+
+   The parts nobody draws still ship with the browser's own design. Theming
+   them is what separates a built interface from an assembled one.
+   --------------------------------------------------------------------------- */
+
 ::selection {
   background: var(--primary-tint);
   color: var(--primary);
+}
+
+input,
+textarea {
+  caret-color: var(--primary);
+}
+
+:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--primary) 55%, transparent);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+a {
+  text-underline-offset: 0.2em;
+  text-decoration-thickness: 0.08em;
+}
+
+/* Prices, times and counts line up in columns rather than jittering as the
+   countdown ticks. */
+.tabular-nums,
+time,
+[data-numeric] {
+  font-variant-numeric: tabular-nums;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) transparent;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border: 3px solid transparent;
+  background-clip: content-box;
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-foreground);
+  border: 3px solid transparent;
+  background-clip: content-box;
 }
 
 /* ---------------------------------------------------------------------------
@@ -218,15 +271,6 @@ textarea {
   font-size: 0.6875rem; /* 11px */
   line-height: 1.27;
   letter-spacing: 0.012em;
-}
-
-/* Small uppercase labels need real tracking or they turn into a smear. */
-.t-overline {
-  font-size: 0.6875rem;
-  line-height: 1.2;
-  letter-spacing: 0.07em;
-  font-weight: 700;
-  text-transform: uppercase;
 }
 
 /* ---------------------------------------------------------------------------
@@ -302,29 +346,24 @@ textarea {
 /* ---------------------------------------------------------------------------
    Entrances
 
-   Lists arrive with a short stagger so a screen assembles instead of
-   appearing all at once. Capped at 8 steps — past that the last row feels
-   late rather than sequenced.
+   A product screen loads into a task, so there is no page-load
+   choreography here. Motion is reserved for the one moment where it
+   reports state: the confirm sheet arriving over the slot it covers, and
+   the booking confirmation that follows it.
    --------------------------------------------------------------------------- */
 
-@keyframes rise-in {
-  from {
-    opacity: 0;
-    transform: translate3d(0, 10px, 0);
-  }
-  to {
-    opacity: 1;
-    transform: translate3d(0, 0, 0);
-  }
-}
-
+/* The sheet arrives as a material, not as a fading rectangle: it resolves
+   out of blur while it rises, so it reads as coming into focus in front of
+   the screen it covers. */
 @keyframes sheet-in {
   from {
     opacity: 0;
-    transform: translate3d(0, 24px, 0) scale(0.98);
+    filter: blur(6px);
+    transform: translate3d(0, 28px, 0) scale(0.985);
   }
   to {
     opacity: 1;
+    filter: blur(0);
     transform: translate3d(0, 0, 0) scale(1);
   }
 }
@@ -338,26 +377,13 @@ textarea {
   }
 }
 
-.animate-rise {
-  animation: rise-in var(--dur-base) var(--ease-out-app) both;
-}
-
 .animate-sheet {
-  animation: sheet-in var(--dur-slow) var(--ease-spring) both;
+  animation: sheet-in var(--dur-slow) var(--ease-out-app) both;
 }
 
 .animate-fade {
   animation: fade-in var(--dur-base) var(--ease-out-app) both;
 }
-
-.stagger > *:nth-child(1) { animation-delay: 0ms; }
-.stagger > *:nth-child(2) { animation-delay: 40ms; }
-.stagger > *:nth-child(3) { animation-delay: 80ms; }
-.stagger > *:nth-child(4) { animation-delay: 120ms; }
-.stagger > *:nth-child(5) { animation-delay: 160ms; }
-.stagger > *:nth-child(6) { animation-delay: 200ms; }
-.stagger > *:nth-child(7) { animation-delay: 240ms; }
-.stagger > *:nth-child(n + 8) { animation-delay: 280ms; }
 
 .no-scrollbar::-webkit-scrollbar {
   display: none;
@@ -383,7 +409,6 @@ textarea {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
-  .animate-rise,
   .animate-sheet,
   .animate-fade {
     animation: fade-in 160ms linear both;

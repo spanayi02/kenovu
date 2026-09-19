@@ -5,15 +5,6 @@ import { formatPrice } from "@/domain/pricing";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
 
-const STATUS_BAR: Record<KenovuSlot["status"], string> = {
-  draft: "bg-border-strong",
-  active: "bg-primary",
-  reserved: "bg-primary",
-  booked: "bg-success",
-  expired: "bg-border-strong",
-  cancelled: "bg-danger",
-};
-
 const STATUS_TEXT: Record<KenovuSlot["status"], string> = {
   draft: "text-muted-foreground",
   active: "text-primary",
@@ -33,7 +24,7 @@ const STATUS_LABEL: Record<KenovuSlot["status"], string> = {
 };
 
 /** A dense operator-log row — this is the Business side's native unit,
- * deliberately not a marketplace card: a status bar, tabular figures, no
+ * deliberately not a marketplace card: tabular figures, stated status, no
  * category art. Business runs on data; Customer runs on browsing. */
 export function SlotStatusRow({
   slot,
@@ -47,9 +38,8 @@ export function SlotStatusRow({
   onCancel?: (id: string) => void;
 }) {
   return (
-    <div className="flex items-stretch gap-3 overflow-hidden rounded-[var(--radius-md)] border border-border bg-surface">
-      <span className={cn("w-1 shrink-0", STATUS_BAR[slot.status])} aria-hidden="true" />
-      <div className="flex flex-1 items-center justify-between gap-3 py-3 pr-3.5">
+    <div className="flex items-stretch rounded-[var(--radius-md)] border border-border bg-surface">
+      <div className="flex flex-1 items-center justify-between gap-3 py-3 pl-3.5 pr-3.5">
         <div className="min-w-0">
           <p className="truncate text-[14px] font-semibold text-foreground">{service.name}</p>
           <p className="text-[12.5px] text-muted-foreground">{formatDateTimeLabel(slot.startTime)}</p>

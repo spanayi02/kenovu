@@ -52,11 +52,12 @@ export function BottomNav({ variant }: { variant: "customer" | "business" }) {
         {variant === "business" && (
           <Link
             href="/business/create"
+            data-testid="create-slot-cta"
             className="press flex w-14 shrink-0 items-center justify-center"
             aria-label="Create Kenovu Slot"
           >
             <span
-              className="flex h-11 w-11 items-center justify-center rounded-full bg-accent text-accent-foreground"
+              className="flex h-11 w-11 items-center justify-center rounded-full bg-primary text-primary-foreground"
               style={{ boxShadow: "var(--shadow-2)" }}
             >
               <Plus className="h-5.5 w-5.5" strokeWidth={2.5} />

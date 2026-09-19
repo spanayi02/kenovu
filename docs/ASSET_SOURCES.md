@@ -22,11 +22,13 @@ License: free for commercial use, no attribution required — see
 | `beauty-1.jpg` | Beauty | https://unsplash.com/photos/CqEGy4zAmbI |
 | `beauty-2.jpg` | Beauty | https://unsplash.com/photos/u93nTfWqR9w |
 
-A small ring-and-marker badge (the app icon's device, see
-`src/components/shared/BrandMark.tsx` and `CategoryArt.tsx`) is drawn on top
-of each photo — real photography for premium feel, the brand's own
-countdown motif kept as a small consistent accent rather than replaced
-outright.
+Nothing is drawn on top of the photo. An earlier version stamped a small
+ring-and-marker badge on each thumbnail whose arc was derived from a hash
+of the business id, not from the slot's actual countdown — a progress ring
+standing in for data it did not represent. It was removed; the brand's
+ring device now appears only where it is the brand mark
+(`src/components/shared/BrandMark.tsx`), and the discount is stated as a
+number.
 
 **Before showing Kenovu to real businesses**, ideally swap these for the
 business's own photos once they're onboarded — stock photography is a

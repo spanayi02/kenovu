@@ -25,11 +25,11 @@ export default function SavedPage() {
             description="Tap the heart on a business or slot to save it here."
           />
         ) : (
-          <div className="stagger grid grid-cols-1 gap-2.5 md:grid-cols-2 xl:grid-cols-3">
+          <div className="grid grid-cols-1 gap-2.5 md:grid-cols-2 xl:grid-cols-3">
             {saved.map((business) => (
               <div
                 key={business.id}
-                className="animate-rise flex gap-3 rounded-[var(--radius-lg)] bg-surface p-3 shadow-e1"
+                className="flex gap-3 rounded-[var(--radius-lg)] bg-surface p-3 shadow-e1"
               >
                 <div className="h-16 w-16 shrink-0 overflow-hidden rounded-[var(--radius-md)]">
                   <CategoryArt category={business.category} imageKey={business.imageKey} className="h-full w-full" />
