@@ -35,11 +35,13 @@ function Chip({
     <button
       type="button"
       onClick={onClick}
+      aria-pressed={active}
       className={cn(
-        "shrink-0 rounded-full border px-3.5 py-1.5 text-[13px] font-medium transition-colors",
+        "press inline-flex h-10 shrink-0 items-center rounded-full px-3.5 text-[13.5px] font-semibold",
+        "transition-[background-color,color,box-shadow] duration-[var(--dur-fast)] ease-[var(--ease-app)]",
         active
-          ? "border-primary bg-primary text-primary-foreground"
-          : "border-border-strong bg-surface text-foreground hover:bg-surface-muted",
+          ? "bg-primary text-primary-foreground shadow-e1"
+          : "bg-surface text-foreground shadow-e1 hover:bg-surface-muted",
       )}
     >
       {children}
@@ -75,14 +77,14 @@ export function DiscoverControls({
   }
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-2">
       <div className="relative">
-        <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+        <Search className="pointer-events-none absolute left-3.5 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-muted-foreground" />
         <input
           value={filters.query}
           onChange={(e) => onChange({ ...filters, query: e.target.value })}
           placeholder="Search massage, nails, haircut…"
-          className="h-11 w-full rounded-[var(--radius-md)] border border-border-strong bg-surface pl-9 pr-3.5 text-[15px] placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+          className="h-11 w-full rounded-[var(--radius-md)] bg-surface pl-10 pr-3.5 text-[15px] shadow-e1 placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30"
         />
       </div>
 
@@ -104,9 +106,9 @@ export function DiscoverControls({
             {qf.label}
           </Chip>
         ))}
-        <div className="mx-1 h-4 w-px shrink-0 bg-border-strong" />
-        <label className="flex shrink-0 items-center gap-1.5 rounded-full border border-border-strong bg-surface px-3 py-1.5 text-[13px] font-medium text-foreground">
-          <SlidersHorizontal className="h-3.5 w-3.5 text-muted-foreground" />
+        <div className="mx-1 h-5 w-px shrink-0 bg-border" />
+        <label className="press inline-flex h-10 shrink-0 items-center gap-1.5 rounded-full bg-surface px-3 text-[13.5px] font-semibold text-foreground shadow-e1">
+          <SlidersHorizontal className="h-4 w-4 text-muted-foreground" />
           <select
             value={filters.sort}
             onChange={(e) => onChange({ ...filters, sort: e.target.value as SortOption })}

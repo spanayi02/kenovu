@@ -35,8 +35,9 @@ export default function BookingsPage() {
               key={t.id}
               onClick={() => setTab(t.id)}
               className={cn(
-                "flex-1 rounded-full px-4 py-2 text-[13.5px] font-medium transition-colors",
-                tab === t.id ? "bg-surface text-foreground shadow-sm" : "text-muted-foreground",
+                "press h-10 flex-1 rounded-full px-4 text-[14px] font-semibold",
+                "transition-[background-color,color] duration-[var(--dur-fast)] ease-[var(--ease-app)]",
+                tab === t.id ? "bg-surface text-foreground shadow-e1" : "text-muted-foreground",
               )}
             >
               {t.label} {groups[t.id].length > 0 && `(${groups[t.id].length})`}
@@ -57,7 +58,7 @@ export default function BookingsPage() {
             description={tab === "upcoming" ? "Book a last-minute slot from Discover." : undefined}
           />
         ) : (
-          <div className="mt-4 grid grid-cols-1 gap-2.5 pb-8 md:grid-cols-2 xl:grid-cols-3">
+          <div className="stagger mt-4 grid grid-cols-1 gap-2.5 pb-8 md:grid-cols-2 xl:grid-cols-3">
             {items.map((booking) => (
               <BookingRow key={booking.id} booking={booking} />
             ))}
@@ -76,11 +77,11 @@ function BookingRow({ booking }: { booking: Booking }) {
   return (
     <Link
       href={`/bookings/${booking.id}`}
-      className="flex items-center justify-between gap-3 rounded-[var(--radius-lg)] border border-border bg-surface p-4"
+      className="press-soft animate-rise flex items-center justify-between gap-3 rounded-[var(--radius-lg)] bg-surface p-4 shadow-e1"
     >
       <div className="min-w-0">
-        <p className="truncate text-[15px] font-semibold text-foreground">{business?.name}</p>
-        <p className="truncate text-[13.5px] text-muted-foreground">{service?.name}</p>
+        <p className="t-headline truncate text-foreground">{business?.name}</p>
+        <p className="t-subhead truncate text-muted-foreground">{service?.name}</p>
         <div className="mt-1.5 flex items-center gap-2 text-[13px] text-muted-foreground">
           <span>{formatDateTimeLabel(booking.startTime)}</span>
           {business && (
@@ -92,7 +93,7 @@ function BookingRow({ booking }: { booking: Booking }) {
         </div>
       </div>
       <div className="flex shrink-0 flex-col items-end gap-1.5">
-        <span className="font-semibold text-foreground">{formatPrice(booking.pricePaid)}</span>
+        <span className="font-bold tabular-nums text-foreground">{formatPrice(booking.pricePaid)}</span>
         <Badge tone={booking.status === "cancelled" ? "danger" : "success"}>
           {booking.status === "confirmed" ? "Confirmed" : booking.status === "completed" ? "Completed" : "Cancelled"}
         </Badge>

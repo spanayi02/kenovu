@@ -3,20 +3,23 @@
 import { use, useMemo } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ChevronLeft, Clock3, Heart, MapPin, ShieldCheck } from "lucide-react";
-import { useBusiness, useFavorites, useRepository, useServicesForBusiness, useSlot } from "@/app-state/hooks";
+import { AlertTriangle, ChevronLeft, Clock3, Heart, MapPin, ShieldCheck } from "lucide-react";
+import {
+  useBusiness,
+  useFavorites,
+  useRepository,
+  useServicesForBusiness,
+  useSlot,
+} from "@/app-state/hooks";
 import { CategoryArt } from "@/components/shared/CategoryArt";
 import { RatingLine } from "@/components/shared/RatingLine";
-import { PriceTag } from "@/components/shared/PriceTag";
 import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/shared/EmptyState";
 import { canBookSlot } from "@/domain/rules";
 import { formatCountdown, formatDateTimeLabel } from "@/domain/time";
-import { CURRENT_CUSTOMER } from "@/domain/constants";
+import { CATEGORY_LABELS, CURRENT_CUSTOMER } from "@/domain/constants";
 import { cn } from "@/lib/utils";
-import { CATEGORY_LABELS } from "@/domain/constants";
-import { AlertTriangle } from "lucide-react";
-import { formatPrice } from "@/domain/pricing";
+import { calculateDiscountPercentage, formatPrice } from "@/domain/pricing";
 
 export default function SlotDetailsPage({
   params,
@@ -55,94 +58,126 @@ export default function SlotDetailsPage({
 
   const bookCheck = canBookSlot(slot);
   const isFavorite = favorites.includes(business.id);
+  const discount = calculateDiscountPercentage(slot.normalPrice, slot.kenovuPrice);
 
   return (
-    <div className="pb-44 md:pb-28">
-      <div className="relative h-56 w-full">
-        <CategoryArt category={business.category} imageKey={business.imageKey} className="h-full w-full" />
+    <div className="pb-36 md:pb-32">
+      {/* Full-bleed hero. The sheet of content below is lifted over its
+          bottom edge so the screen reads as two layers, not two blocks. */}
+      <div className="relative h-72 w-full md:h-80">
+        <CategoryArt
+          category={business.category}
+          imageKey={business.imageKey}
+          className="h-full w-full"
+          sizes="100vw"
+          priority
+          badge="none"
+        />
+        {/* Scrim only at the top, where the floating controls sit — a
+            full-height gradient would grey out the photograph. */}
+        <div
+          className="pointer-events-none absolute inset-x-0 top-0 h-28"
+          style={{
+            background:
+              "linear-gradient(to bottom, rgba(20,18,14,0.38), rgba(20,18,14,0))",
+          }}
+        />
         <div
           className="absolute inset-x-0 top-0 flex items-center justify-between px-3"
           style={{ paddingTop: "calc(var(--safe-top) + 0.5rem)" }}
         >
-          <button
-            type="button"
-            onClick={() => router.back()}
-            className="flex h-9 w-9 items-center justify-center rounded-full bg-surface/90 text-foreground shadow-sm"
-            aria-label="Back"
-          >
-            <ChevronLeft className="h-5 w-5" />
-          </button>
-          <button
-            type="button"
+          <HeroButton onClick={() => router.back()} label="Back">
+            <ChevronLeft className="h-5 w-5" strokeWidth={2.2} />
+          </HeroButton>
+          <HeroButton
             onClick={() => repository.toggleFavorite(CURRENT_CUSTOMER.id, business.id)}
-            aria-pressed={isFavorite}
-            aria-label={isFavorite ? "Remove from saved" : "Save business"}
-            className="flex h-9 w-9 items-center justify-center rounded-full bg-surface/90 text-foreground shadow-sm"
+            label={isFavorite ? "Remove from saved" : "Save business"}
+            pressed={isFavorite}
           >
-            <Heart className={cn("h-4.5 w-4.5", isFavorite && "fill-accent text-accent")} />
-          </button>
+            <Heart
+              className={cn("h-[18px] w-[18px]", isFavorite && "fill-accent text-accent")}
+              strokeWidth={2.2}
+            />
+          </HeroButton>
         </div>
       </div>
 
-      <div className="mx-auto max-w-xl px-4 pt-4">
-        <p className="text-[13px] font-medium uppercase tracking-wide text-muted-foreground">
-          {CATEGORY_LABELS[service.category]}
-        </p>
-        <h1 className="mt-0.5 text-2xl font-bold leading-tight text-foreground">{service.name}</h1>
-
-        <p className="mt-1.5 text-[15px] font-medium text-primary">{business.name}</p>
-        <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-[13px] text-muted-foreground">
-          <RatingLine rating={business.rating} reviewCount={business.reviewCount} />
-          <span className="inline-flex items-center gap-1">
-            <MapPin className="h-3.5 w-3.5" />
-            {business.location.area} · {business.location.distanceKm.toFixed(1)} km
-          </span>
-        </div>
-
-        <p className="mt-4 text-[14.5px] leading-relaxed text-foreground">{service.description}</p>
-
-        <div className="mt-5 rounded-[var(--radius-lg)] border border-border bg-surface-muted p-4">
-          <div className="flex items-center justify-between text-[14.5px]">
-            <span className="inline-flex items-center gap-1.5 font-medium text-foreground">
-              <Clock3 className="h-4 w-4 text-muted-foreground" />
-              {formatDateTimeLabel(slot.startTime)}
-            </span>
-            <span className="text-accent font-medium">{formatCountdown(slot.startTime)}</span>
-          </div>
-          <div className="mt-2 text-[13.5px] text-muted-foreground">
-            {service.durationMinutes} min · {business.location.addressLine}
-          </div>
-        </div>
-
-        <div className="mt-5 flex items-start gap-2.5 rounded-[var(--radius-lg)] border border-border p-4">
-          <ShieldCheck className="mt-0.5 h-4.5 w-4.5 shrink-0 text-primary" />
-          <p className="text-[13.5px] leading-relaxed text-muted-foreground">
-            Pay the Kenovu price shown, no extra booking fee. This is a last-minute slot, so
-            please arrive on time. The appointment cannot be rescheduled through Kenovu.
+      <div className="animate-sheet relative -mt-6 rounded-t-[var(--radius-xl)] bg-background pt-5">
+        <div className="mx-auto max-w-xl px-4">
+          <p className="t-overline text-muted-foreground">
+            {CATEGORY_LABELS[service.category]}
           </p>
-        </div>
+          <h1 className="t-title mt-1 text-foreground">{service.name}</h1>
 
-        <div className="mt-6">
-          <p className="text-[13px] text-muted-foreground">Normal price</p>
-          <PriceTag normalPrice={slot.normalPrice} kenovuPrice={slot.kenovuPrice} size="lg" />
+          <p className="t-body mt-1.5 font-semibold text-primary">{business.name}</p>
+          <div className="t-subhead mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-muted-foreground">
+            <RatingLine rating={business.rating} reviewCount={business.reviewCount} />
+            <span className="inline-flex items-center gap-1">
+              <MapPin className="h-3.5 w-3.5" />
+              {business.location.area} · {business.location.distanceKm.toFixed(1)} km
+            </span>
+          </div>
+
+          <p className="t-body mt-4 text-foreground">{service.description}</p>
+
+          <div className="mt-5 rounded-[var(--radius-lg)] bg-surface p-4 shadow-e1">
+            <div className="flex items-center justify-between">
+              <span className="t-body inline-flex items-center gap-2 font-semibold tabular-nums text-foreground">
+                <Clock3 className="h-4 w-4 text-muted-foreground" />
+                {formatDateTimeLabel(slot.startTime)}
+              </span>
+              <span className="t-subhead font-bold text-accent">
+                {formatCountdown(slot.startTime)}
+              </span>
+            </div>
+            <div className="t-subhead mt-2 text-muted-foreground">
+              {service.durationMinutes} min · {business.location.addressLine}
+            </div>
+          </div>
+
+          <div className="mt-3 flex items-start gap-2.5 rounded-[var(--radius-lg)] bg-surface-muted p-4">
+            <ShieldCheck className="mt-0.5 h-[18px] w-[18px] shrink-0 text-primary" />
+            <p className="t-subhead leading-relaxed text-muted-foreground">
+              Pay the Kenovu price shown, no extra booking fee. This is a last-minute slot, so
+              please arrive on time. The appointment cannot be rescheduled through Kenovu.
+            </p>
+          </div>
         </div>
       </div>
 
+      {/* Sticky action bar: a translucent material the content scrolls
+          under, carrying the price so the decision and the tap are in the
+          same place. */}
       <div
-        className="fixed inset-x-0 bottom-[calc(4.25rem+var(--safe-bottom))] z-30 border-t border-border bg-surface/95 px-4 py-3 backdrop-blur md:bottom-0"
+        className="material-thick fixed inset-x-0 bottom-0 z-30 px-4 pt-3"
+        style={{
+          paddingBottom: "calc(var(--safe-bottom) + 0.875rem)",
+          borderTop: "0.5px solid var(--hairline)",
+        }}
       >
-        <div className="mx-auto max-w-xl">
+        <div className="mx-auto flex max-w-xl items-center gap-3">
+          <div className="shrink-0">
+            <p className="t-caption text-muted-foreground line-through">
+              {formatPrice(slot.normalPrice)}
+            </p>
+            <p className="text-[24px] font-extrabold leading-none tracking-[-0.03em] tabular-nums text-accent">
+              {formatPrice(slot.kenovuPrice)}
+            </p>
+            {discount > 0 && (
+              <p className="t-caption mt-1 font-bold text-accent">{discount}% less</p>
+            )}
+          </div>
           {bookCheck.valid ? (
             <Button
               size="lg"
-              className="w-full"
+              className="flex-1"
               variant="accent"
               onClick={() => router.push(`/discover/${slot.id}/confirm`)}
             >
-              Book for {formatPrice(slot.kenovuPrice)}
+              Book this slot
             </Button>
           ) : (
-            <Button size="lg" className="w-full" disabled>
+            <Button size="lg" className="flex-1" disabled>
               {bookCheck.message}
             </Button>
           )}
@@ -152,10 +187,39 @@ export default function SlotDetailsPage({
   );
 }
 
+/** A floating control over photography: its own material so it stays
+ * legible whatever the image behind it happens to be. */
+function HeroButton({
+  onClick,
+  label,
+  pressed,
+  children,
+}: {
+  onClick: () => void;
+  label: string;
+  pressed?: boolean;
+  children: React.ReactNode;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label={label}
+      aria-pressed={pressed}
+      className="press material-thick flex h-11 w-11 items-center justify-center rounded-full text-foreground shadow-e2"
+    >
+      {children}
+    </button>
+  );
+}
+
 function TopBackBar() {
   return (
-    <div className="px-4 pt-4" style={{ paddingTop: "calc(var(--safe-top) + 1rem)" }}>
-      <Link href="/discover" className="inline-flex items-center gap-1 text-sm text-muted-foreground">
+    <div className="px-4" style={{ paddingTop: "calc(var(--safe-top) + 1rem)" }}>
+      <Link
+        href="/discover"
+        className="t-subhead press inline-flex items-center gap-1 text-muted-foreground"
+      >
         <ChevronLeft className="h-4 w-4" /> Back
       </Link>
     </div>

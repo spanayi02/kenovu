@@ -1,4 +1,12 @@
+import { existsSync } from "node:fs";
 import { defineConfig, devices } from "@playwright/test";
+
+const CANDIDATE_CHROMIUM = [
+  "/opt/pw-browsers/chromium-1194/chrome-linux/chrome",
+  "/opt/pw-browsers/chromium/chrome-linux/chrome",
+];
+
+const DEFAULT_CHROMIUM = CANDIDATE_CHROMIUM.find((p) => existsSync(p));
 
 export default defineConfig({
   testDir: "./tests/e2e",
@@ -10,7 +18,9 @@ export default defineConfig({
     baseURL: "http://localhost:3100",
     trace: "retain-on-failure",
     launchOptions: {
-      executablePath: process.env.PW_CHROMIUM_PATH,
+      // The sandbox ships a Chromium build that playwright-core doesn't
+      // expect, so point at it directly rather than downloading one.
+      executablePath: process.env.PW_CHROMIUM_PATH ?? DEFAULT_CHROMIUM,
     },
   },
   webServer: {

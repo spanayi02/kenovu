@@ -140,7 +140,7 @@ export default function CreateSlotPage() {
                   setKenovuPrice(null);
                   setStep("time");
                 }}
-                className="flex items-center justify-between rounded-[var(--radius-lg)] border border-border-strong bg-surface p-4 text-left hover:border-primary"
+                className="press-soft flex items-center justify-between rounded-[var(--radius-lg)] border border-border-strong bg-surface p-4 text-left hover:border-primary"
               >
                 <div>
                   <p className="text-[15px] font-semibold text-foreground">{service.name}</p>
@@ -165,7 +165,7 @@ export default function CreateSlotPage() {
                     type="button"
                     onClick={() => setDay(d)}
                     className={cn(
-                      "flex-1 rounded-[var(--radius-md)] border px-4 py-2.5 text-[14px] font-medium capitalize",
+                      "press h-11 flex-1 rounded-[var(--radius-md)] border px-4 text-[14px] font-semibold capitalize",
                       day === d
                         ? "border-primary bg-primary text-primary-foreground"
                         : "border-border-strong bg-surface text-foreground",
@@ -207,7 +207,7 @@ export default function CreateSlotPage() {
                   key={pct}
                   type="button"
                   onClick={() => setKenovuPrice(quickDiscountPrice(selectedService.normalPrice, pct))}
-                  className="flex-1 rounded-[var(--radius-md)] border border-border-strong bg-surface py-2 text-[13.5px] font-medium text-foreground hover:border-primary"
+                  className="press h-10 flex-1 rounded-[var(--radius-md)] border border-border-strong bg-surface text-[13.5px] font-semibold text-foreground hover:border-primary"
                 >
                   -{pct}%
                 </button>

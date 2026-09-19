@@ -44,6 +44,17 @@ no query cache library).
   `Date.now()` at render time, never hardcoded
 - `constants.ts` — commission rate, categories, Nicosia areas, etc.
 
+## Routing note: the confirm sheet
+
+`/discover/[slotId]/confirm` exists twice on purpose. The slot screen owns
+a parallel `@modal` slot, and `@modal/(.)confirm/` intercepts a client-side
+navigation to that URL so the confirm panel is presented as a sheet over
+the slot screen it came from. The plain `confirm/` route still handles a
+cold load of the same URL (a refresh, a shared link), where there is no
+screen behind it to dim. Both render the same
+`components/customer/ConfirmBookingPanel`, so the two presentations cannot
+drift apart.
+
 ## State management
 
 Plain React state + Context, no external state library. Rationale: the

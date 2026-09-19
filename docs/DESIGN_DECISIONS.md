@@ -35,8 +35,8 @@ One strong primary + neutral supporting palette, no competing accents.
 - Cards used deliberately for *inventory* (slot cards, business cards) —
   not for every piece of UI. Section headers, filters and forms are not
   wrapped in cards.
-- One radius scale (`rounded-lg` default, `rounded-xl` for cards/sheets
-  only) — not "everything is rounded-2xl."
+- One radius scale (sm/md/lg/xl tokens, xl reserved for sheets) — not
+  "everything is rounded-2xl."
 - Shadows minimal — a single soft elevation for the sticky booking CTA and
   for the slot card on press; no glow/blur decoration.
 - Bottom tab navigation on mobile (4 destinations per persona, per spec),
@@ -54,7 +54,7 @@ testimonials/social proof/live-viewer-counts, no emoji-as-icon, no sparkle/
 lightning iconography, no meaningless KPI wall (business dashboard shows 3
 numbers, not 12), no everything-is-a-card composition, no generic marketing
 copy ("unlock", "supercharge", "seamless", "AI-powered"). Copy is short,
-concrete, and functional ("Available today near you", "Book for €38",
+concrete, and functional ("Available today near you", "Book this slot",
 "Your slot is live").
 
 ## Reference study (not cloned)
@@ -64,3 +64,63 @@ mobile information hierarchy, sticky booking CTA placement, card scan-
 ability, trust signals via rating+review-count, confirmation-screen
 structure — never for visual identity, logos or exact layouts. See
 `/docs/RESEARCH.md`.
+
+## Mobile-app rebrand (native feel, same brand)
+
+Kenovu is demoed on a phone, to salon owners, in about a minute. The
+palette and typeface were already right; what read as "website" was the
+mechanics. So this pass changed behaviour and materials, not identity — no
+new colours, no new typeface, no new illustration style.
+
+**Foundation** (`src/app/globals.css`). Everything below is a token, so no
+screen invents its own timing, blur or shadow:
+
+- **Type scale with size-specific tracking** (`.t-display` → `.t-caption`).
+  Large text is pulled in (−0.031em at 31px), body sits at zero, small
+  labels get a little air (+0.012em). A single `letter-spacing` is always
+  wrong at one end of the scale.
+- **Motion tokens**: one decelerating curve (`--ease-out-app`) for anything
+  settling into place, one gently overshooting curve (`--ease-spring`)
+  reserved for motion a finger started. Durations are named by intent
+  (`--dur-press` 120ms → `--dur-slow` 380ms), not picked per component.
+- **Elevation instead of outlines** on customer surfaces. Shadows are
+  tinted with the brand's warm ink, never pure black, so they read as shade
+  on cream rather than a grey halo. The business side keeps its borders —
+  that contrast is deliberate (see the customer/business split above).
+- **Materials**: floating chrome is translucent (`backdrop-filter`) with
+  content passing underneath, and separators are 0.5px hairlines rather
+  than 1px web rules.
+- **Larger radii**: 10 / 14 / 20 / 28px, with 28 reserved for sheets.
+
+**Interaction**
+
+- Feedback fires on pointer-down (`:active`), inside the press perception
+  window, and only moves `transform`/`opacity` so nothing around it reflows.
+- Tap highlight removed, `touch-action: manipulation` to kill the double-tap
+  delay, text selection off on chrome and on for content.
+- Touch targets are at least 44px on primary controls; filter chips are
+  40px pills with 8px gaps.
+
+**Navigation**
+
+- The tab bar is a floating translucent bar, not a full-width sticky
+  footer — content scrolls under it. Active tab is a tinted capsule behind
+  the glyph, because Lucide is outline-only and filling a glyph destroys it.
+- **Pushed screens hide the tab bar** (a slot, a booking, the create form),
+  the way a native app does on a push. It frees the bottom for that
+  screen's own action bar and makes "deeper" read as deeper. Because the
+  booking-confirmation screen then has no tab bar, it carries its own
+  "Keep browsing" exit.
+- **Confirming is presented as a sheet over the slot screen**, via a Next.js
+  intercepting route (`@modal/(.)confirm`). The slot you were reading stays
+  behind the scrim instead of being replaced. A cold load of the same URL
+  has nothing to dim, so it renders as a standalone screen — same panel,
+  different presentation.
+
+**Accessibility**
+
+`prefers-reduced-motion` keeps the feedback and drops the travel;
+`prefers-reduced-transparency` makes materials solid;
+`prefers-contrast: more` restores hard edges and darkens muted text.
+Pinch-zoom was re-enabled — locking it is the usual way to make a PWA
+"feel native" and it takes zoom away from anyone who needs it.

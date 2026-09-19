@@ -12,7 +12,7 @@ test.describe("Kenovu edge cases", () => {
     const firstCard = page.locator('a[href^="/discover/slot-"]').first();
     await firstCard.click();
 
-    const bookButton = page.getByRole("button", { name: /^Book for €/ });
+    const bookButton = page.getByRole("button", { name: "Book this slot" });
     await bookButton.click();
     await page.getByRole("button", { name: /^Confirm booking/ }).click();
     await expect(page.getByText("You're booked!")).toBeVisible({ timeout: 5000 });

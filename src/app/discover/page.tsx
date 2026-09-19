@@ -30,13 +30,13 @@ export default function DiscoverPage() {
   return (
     <div>
       <ScreenHeader title="Discover" subtitle="Nicosia · Available today" />
-      <div className="mx-auto max-w-6xl px-4 pt-4">
+      <div className="mx-auto max-w-6xl px-4 pt-3">
         <div className="md:max-w-2xl">
           <DiscoverControls filters={filters} onChange={setFilters} />
         </div>
 
-        <div className="mt-5 flex items-baseline justify-between">
-          <h2 className="text-[15px] font-semibold text-foreground">
+        <div className="mt-4 flex items-baseline justify-between">
+          <h2 className="t-headline text-foreground">
             {results.length === joined.length
               ? "Available today near you"
               : `${results.length} available`}
@@ -55,9 +55,15 @@ export default function DiscoverPage() {
             }
           />
         ) : (
-          <div className="mt-3 grid grid-cols-1 gap-2.5 pb-8 md:grid-cols-2 xl:grid-cols-3">
-            {results.map(({ slot, business, service }) => (
-              <SlotCard key={slot.id} slot={slot} business={business} service={service} />
+          <div className="stagger mt-3 grid grid-cols-1 gap-2.5 pb-8 md:grid-cols-2 xl:grid-cols-3">
+            {results.map(({ slot, business, service }, index) => (
+              <SlotCard
+                key={slot.id}
+                slot={slot}
+                business={business}
+                service={service}
+                priority={index < 3}
+              />
             ))}
           </div>
         )}

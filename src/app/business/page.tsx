@@ -61,7 +61,7 @@ export default function BusinessTodayPage() {
           <Link
             href="/business/create"
             data-testid="create-slot-cta"
-            className="mt-4 flex items-center justify-between gap-3 rounded-[var(--radius-lg)] bg-primary px-4 py-4 text-primary-foreground md:hidden"
+            className="press-soft mt-4 flex items-center justify-between gap-3 rounded-[var(--radius-lg)] bg-primary px-4 py-4 text-primary-foreground shadow-e2 md:hidden"
           >
             <div className="flex items-center gap-3">
               <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white/15">

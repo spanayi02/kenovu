@@ -1,13 +1,27 @@
 @import "tailwindcss";
 
+/* ---------------------------------------------------------------------------
+   Kenovu foundation.
+
+   Kenovu is demoed on a phone, to salon owners, in about a minute. So the
+   foundation is built for an app, not a page: type that tightens as it grows,
+   spring-ish motion on a single shared curve, translucent chrome that content
+   scrolls under, and elevation instead of outlines. Every value here is a
+   token so a screen never invents its own timing, blur or shadow.
+   --------------------------------------------------------------------------- */
+
 :root {
+  /* --- Colour ------------------------------------------------------------ */
   --background: #faf9f6;
   --surface: #ffffff;
   --surface-muted: #f3f1ec;
+  --surface-sunken: #efece5;
   --foreground: #211f1a;
   --muted-foreground: #6b6759;
   --border: #e6e2d8;
   --border-strong: #d6d1c2;
+  /* Hairlines: a real 1-device-pixel rule, not a 1px CSS box. */
+  --hairline: rgba(33, 31, 26, 0.09);
 
   --primary: #1f4d3e;
   --primary-hover: #17392e;
@@ -24,20 +38,55 @@
   --danger: #b3261e;
   --danger-tint: #fbebea;
 
-  --radius-sm: 0.5rem;
-  --radius-md: 0.75rem;
-  --radius-lg: 1rem;
+  /* --- Radii -------------------------------------------------------------
+     App corners are rounder than web corners. xl is reserved for sheets. */
+  --radius-sm: 0.625rem; /* 10px — chips, small controls */
+  --radius-md: 0.875rem; /* 14px — buttons, inputs, thumbnails */
+  --radius-lg: 1.25rem; /*  20px — cards, panels */
+  --radius-xl: 1.75rem; /*  28px — sheets, modals */
 
+  /* --- Motion ------------------------------------------------------------
+     One decelerating curve for everything that settles into place, one
+     gently overshooting curve reserved for motion the finger started.
+     Durations are named by intent so nothing hand-picks a number. */
+  --ease-out-app: cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-spring: cubic-bezier(0.34, 1.26, 0.64, 1);
+  --dur-press: 120ms; /* tap feedback — must beat perception */
+  --dur-fast: 180ms; /* state changes, tints, chips */
+  --dur-base: 260ms; /* entrances, reveals */
+  --dur-slow: 380ms; /* sheets and full-screen transitions */
+
+  /* --- Elevation ---------------------------------------------------------
+     Shadows are tinted with the brand's warm ink, never pure black, so
+     they read as shade on cream rather than a grey halo. */
+  --shadow-1: 0 1px 2px rgba(48, 42, 28, 0.06), 0 1px 1px rgba(48, 42, 28, 0.04);
+  --shadow-2: 0 2px 6px rgba(48, 42, 28, 0.07), 0 1px 2px rgba(48, 42, 28, 0.05);
+  --shadow-3: 0 8px 24px rgba(48, 42, 28, 0.1), 0 2px 6px rgba(48, 42, 28, 0.06);
+  --shadow-4: 0 18px 44px rgba(48, 42, 28, 0.16), 0 4px 12px rgba(48, 42, 28, 0.08);
+
+  /* --- Materials ---------------------------------------------------------
+     Floating chrome is a translucent layer content passes beneath. */
+  --material-thin: rgba(250, 249, 246, 0.72);
+  --material-thick: rgba(250, 249, 246, 0.9);
+  --material-blur: saturate(180%) blur(20px);
+
+  /* --- Safe areas -------------------------------------------------------- */
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
   --safe-left: env(safe-area-inset-left, 0px);
   --safe-right: env(safe-area-inset-right, 0px);
+
+  /* Height of the floating tab bar, so screens can inset their scroll
+     content by exactly the right amount instead of guessing padding. */
+  --tab-bar-height: 3.75rem;
+  --tab-bar-inset: calc(var(--tab-bar-height) + var(--safe-bottom) + 0.75rem);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-surface: var(--surface);
   --color-surface-muted: var(--surface-muted);
+  --color-surface-sunken: var(--surface-sunken);
   --color-foreground: var(--foreground);
   --color-muted-foreground: var(--muted-foreground);
   --color-border: var(--border);
@@ -64,6 +113,15 @@
   --radius-sm: var(--radius-sm);
   --radius-md: var(--radius-md);
   --radius-lg: var(--radius-lg);
+  --radius-xl: var(--radius-xl);
+
+  --shadow-e1: var(--shadow-1);
+  --shadow-e2: var(--shadow-2);
+  --shadow-e3: var(--shadow-3);
+  --shadow-e4: var(--shadow-4);
+
+  --ease-app: var(--ease-out-app);
+  --ease-spring: var(--ease-spring);
 }
 
 * {
@@ -78,12 +136,36 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
+  /* Body copy sits at the neutral end of the tracking scale. */
+  letter-spacing: 0;
 }
 
-/* Prevent the standalone PWA shell from bouncing / hiding content under notches */
+/* No blue flash on tap, no 300ms delay, no accidental text selection while
+   scrolling a list of cards — three things that instantly read as "website". */
 html,
 body {
   overscroll-behavior-y: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+a,
+button,
+[role="button"],
+label {
+  touch-action: manipulation;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* Text still needs to be selectable where it's content, not chrome. */
+p,
+h1,
+h2,
+h3,
+input,
+textarea {
+  -webkit-user-select: auto;
+  user-select: auto;
 }
 
 ::selection {
@@ -91,10 +173,247 @@ body {
   color: var(--primary);
 }
 
+/* ---------------------------------------------------------------------------
+   Type scale.
+
+   Tracking is size-specific: large text reads too loose at default spacing
+   and needs to be pulled in; small text needs a touch more air. One fixed
+   letter-spacing would be wrong at one end or the other.
+   --------------------------------------------------------------------------- */
+
+.t-display {
+  font-size: 1.9375rem; /* 31px */
+  line-height: 1.1;
+  letter-spacing: -0.031em;
+  font-weight: 800;
+}
+
+.t-title {
+  font-size: 1.4375rem; /* 23px */
+  line-height: 1.18;
+  letter-spacing: -0.023em;
+  font-weight: 700;
+}
+
+.t-headline {
+  font-size: 1.0625rem; /* 17px */
+  line-height: 1.3;
+  letter-spacing: -0.012em;
+  font-weight: 700;
+}
+
+.t-body {
+  font-size: 0.9375rem; /* 15px */
+  line-height: 1.47;
+  letter-spacing: -0.002em;
+}
+
+.t-subhead {
+  font-size: 0.8125rem; /* 13px */
+  line-height: 1.38;
+  letter-spacing: 0.002em;
+}
+
+.t-caption {
+  font-size: 0.6875rem; /* 11px */
+  line-height: 1.27;
+  letter-spacing: 0.012em;
+}
+
+/* Small uppercase labels need real tracking or they turn into a smear. */
+.t-overline {
+  font-size: 0.6875rem;
+  line-height: 1.2;
+  letter-spacing: 0.07em;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+/* ---------------------------------------------------------------------------
+   Materials & separators
+   --------------------------------------------------------------------------- */
+
+.material-thin {
+  background: var(--material-thin);
+  -webkit-backdrop-filter: var(--material-blur);
+  backdrop-filter: var(--material-blur);
+}
+
+.material-thick {
+  background: var(--material-thick);
+  -webkit-backdrop-filter: var(--material-blur);
+  backdrop-filter: var(--material-blur);
+}
+
+/* A hairline is one device pixel. A 1px border is two on a phone and reads
+   as a heavy web rule. */
+.hairline-t {
+  border-top: 0.5px solid var(--hairline);
+}
+.hairline-b {
+  border-bottom: 0.5px solid var(--hairline);
+}
+
+/* Where floating chrome overlaps scrolling content, fade the content out
+   instead of ruling a line under the header. */
+.scroll-edge::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  top: 100%;
+  height: 0.75rem;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--background) 82%, transparent),
+    transparent
+  );
+}
+
+/* ---------------------------------------------------------------------------
+   Interaction
+
+   Press feedback fires on pointer-down (:active), lands inside the press
+   perception window, and only touches transform/opacity so it never moves
+   the layout around it.
+   --------------------------------------------------------------------------- */
+
+.press {
+  transition:
+    transform var(--dur-press) var(--ease-out-app),
+    opacity var(--dur-press) var(--ease-out-app),
+    background-color var(--dur-fast) var(--ease-out-app);
+}
+.press:active {
+  transform: scale(0.97);
+}
+
+/* Big surfaces shouldn't shrink as much as small ones, or the whole screen
+   looks like it's being squeezed. */
+.press-soft {
+  transition:
+    transform var(--dur-press) var(--ease-out-app),
+    box-shadow var(--dur-fast) var(--ease-out-app);
+}
+.press-soft:active {
+  transform: scale(0.985);
+}
+
+/* ---------------------------------------------------------------------------
+   Entrances
+
+   Lists arrive with a short stagger so a screen assembles instead of
+   appearing all at once. Capped at 8 steps — past that the last row feels
+   late rather than sequenced.
+   --------------------------------------------------------------------------- */
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 10px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes sheet-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 24px, 0) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-rise {
+  animation: rise-in var(--dur-base) var(--ease-out-app) both;
+}
+
+.animate-sheet {
+  animation: sheet-in var(--dur-slow) var(--ease-spring) both;
+}
+
+.animate-fade {
+  animation: fade-in var(--dur-base) var(--ease-out-app) both;
+}
+
+.stagger > *:nth-child(1) { animation-delay: 0ms; }
+.stagger > *:nth-child(2) { animation-delay: 40ms; }
+.stagger > *:nth-child(3) { animation-delay: 80ms; }
+.stagger > *:nth-child(4) { animation-delay: 120ms; }
+.stagger > *:nth-child(5) { animation-delay: 160ms; }
+.stagger > *:nth-child(6) { animation-delay: 200ms; }
+.stagger > *:nth-child(7) { animation-delay: 240ms; }
+.stagger > *:nth-child(n + 8) { animation-delay: 280ms; }
+
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+/* ---------------------------------------------------------------------------
+   Accessibility preferences
+
+   Reduced motion keeps the feedback, drops the travel. Reduced transparency
+   makes materials solid. Increased contrast restores hard edges.
+   --------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .animate-rise,
+  .animate-sheet,
+  .animate-fade {
+    animation: fade-in 160ms linear both;
+  }
+  .press:active,
+  .press-soft:active {
+    transform: none;
+    opacity: 0.7;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .material-thin,
+  .material-thick {
+    background: var(--background);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+@media (prefers-contrast: more) {
+  :root {
+    --hairline: rgba(33, 31, 26, 0.35);
+    --muted-foreground: #4f4c41;
+    --border: #bdb8a8;
+  }
+  .material-thin,
+  .material-thick {
+    background: var(--background);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
 }

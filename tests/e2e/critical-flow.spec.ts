@@ -40,7 +40,7 @@ test.describe("Kenovu critical loop", () => {
 
     // 4. Slot details show the service we just published.
     await expect(page.getByRole("heading", { name: "Deep Tissue Massage" })).toBeVisible();
-    const bookButton = page.getByRole("button", { name: /^Book for €/ });
+    const bookButton = page.getByRole("button", { name: "Book this slot" });
     await expect(bookButton).toBeVisible();
 
     // 5. Book it.

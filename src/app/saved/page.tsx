@@ -25,23 +25,23 @@ export default function SavedPage() {
             description="Tap the heart on a business or slot to save it here."
           />
         ) : (
-          <div className="grid grid-cols-1 gap-2.5 md:grid-cols-2 xl:grid-cols-3">
+          <div className="stagger grid grid-cols-1 gap-2.5 md:grid-cols-2 xl:grid-cols-3">
             {saved.map((business) => (
               <div
                 key={business.id}
-                className="flex gap-3 rounded-[var(--radius-lg)] border border-border bg-surface p-3"
+                className="animate-rise flex gap-3 rounded-[var(--radius-lg)] bg-surface p-3 shadow-e1"
               >
                 <div className="h-16 w-16 shrink-0 overflow-hidden rounded-[var(--radius-md)]">
                   <CategoryArt category={business.category} imageKey={business.imageKey} className="h-full w-full" />
                 </div>
                 <div className="min-w-0 flex-1">
                   <div className="flex items-start justify-between gap-2">
-                    <p className="truncate text-[15px] font-semibold text-foreground">{business.name}</p>
+                    <p className="t-headline truncate text-foreground">{business.name}</p>
                     <button
                       type="button"
                       onClick={() => repository.toggleFavorite(CURRENT_CUSTOMER.id, business.id)}
                       aria-label="Remove from saved"
-                      className="text-accent"
+                      className="press -mr-1 -mt-1 flex h-11 w-11 shrink-0 items-center justify-center text-accent"
                     >
                       <Heart className="h-4.5 w-4.5 fill-accent" />
                     </button>

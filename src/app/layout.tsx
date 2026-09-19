@@ -31,9 +31,13 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1,
+  // Pinch-zoom stays enabled. Locking it is the usual way to make a PWA
+  // "feel native" and it takes zoom away from anyone who needs it; the
+  // double-tap delay is already handled with touch-action instead.
   viewportFit: "cover",
-  themeColor: "#1F4D3E",
+  // The chrome the status bar sits against is the cream background, not the
+  // brand green, so an installed app blends at the top edge.
+  themeColor: "#FAF9F6",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

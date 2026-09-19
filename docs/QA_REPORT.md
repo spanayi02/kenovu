@@ -1,6 +1,7 @@
 # Kenovu — QA Report
 
-QA pass performed 2026-09-03 against the production build (`npm run build && npm run start`).
+QA pass performed 2026-09-19 against the production build (`npm run build && npm run start`),
+re-run after the mobile-app rebrand (see `/docs/DESIGN_DECISIONS.md`).
 
 ## Automated checks
 
@@ -57,7 +58,7 @@ All steps pass.
 4. **Wizard/detail page headers weren't width-constrained** on wide viewports, so they sat flush-left while the content below them was centered — fixed by wrapping each in the same `max-w-xl` container as its content.
 5. Confirmed the Next.js dev-mode indicator badge (visible during `next dev`) does not appear in the production build — the earlier screenshots showing it were a false alarm from testing against the dev server.
 
-No AI-slop patterns were found on re-review: no gradients, no glassmorphism, no decorative blobs, no oversized hero, no fake social proof, restrained single-accent-color use (ember reserved for price/savings only), short functional copy throughout.
+No AI-slop patterns were found on re-review: no gradients, no decorative blobs, no oversized hero, no fake social proof, restrained single-accent-color use (ember reserved for price/savings only), short functional copy throughout. Translucency appears only on functional chrome the content scrolls under (tab bar, screen headers, the slot screen's action bar, the demo switcher) — it is a material, not decorative glass panels stacked on the page, and it collapses to a solid surface under `prefers-reduced-transparency`.
 
 ## Manual functional checks
 
@@ -70,3 +71,35 @@ No AI-slop patterns were found on re-review: no gradients, no glassmorphism, no 
 ## Known limitations (see `/docs/PROTOTYPE_SCOPE.md`)
 
 Single demo business in Business Mode (no multi-business/staff accounts); no real payments; no real notifications; category chip filter row on mobile is horizontally scrollable rather than wrapping (matches the reference products studied, e.g. Fresha/Airbnb chip rows).
+
+## Mobile-app rebrand pass (2026-09-19)
+
+Re-verified at 390×844 (2× DPR, touch, iPhone UA) against the production
+build after the changes in `/docs/DESIGN_DECISIONS.md` § "Mobile-app
+rebrand", plus 1280×900 to confirm the desktop layouts did not regress.
+
+| Check | Result |
+|---|---|
+| typecheck / lint / build | ✅ Pass |
+| Vitest domain tests | ✅ 30/30 |
+| Playwright E2E (critical loop + edge cases) | ✅ 6/6 |
+| Console errors across Discover, Slot, Confirm, Booking, Saved, Bookings, Business Today/Slots/Create, Profile | ✅ 0 |
+
+Fixed during this pass:
+
+1. The E2E selector for the slot screen's CTA was matching the old
+   `Book for €X` label; the sticky bar now shows the price beside the
+   button, so the tests were updated to `Book this slot`.
+2. The first Discover photos were the Largest Contentful Paint but loaded
+   lazily — the first three cards now load eagerly.
+3. Pinch-zoom was disabled by `maximumScale: 1` in the viewport config.
+   Removed; the double-tap delay it was masking is handled by
+   `touch-action: manipulation` instead.
+4. `theme_color` was brand green while the chrome behind the status bar is
+   cream, so an installed PWA showed a mismatched band at the top edge.
+   Now cream in both the manifest and the viewport metadata.
+5. Hiding the tab bar on pushed screens left the booking-confirmation
+   screen with no way onward except the small back link; it now carries a
+   "Keep browsing" action.
+6. `playwright.config.ts` required a `PW_CHROMIUM_PATH` env var to find the
+   sandbox's Chromium build; it now falls back to the known paths.

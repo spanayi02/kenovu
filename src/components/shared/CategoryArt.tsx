@@ -44,10 +44,18 @@ export function CategoryArt({
   category,
   imageKey,
   className,
+  sizes = "(min-width: 768px) 220px, 96px",
+  priority = false,
+  badge = "sm",
 }: {
   category: ServiceCategory;
   imageKey: string;
   className?: string;
+  sizes?: string;
+  priority?: boolean;
+  /** "lg" for full-bleed heroes, "none" where the photo carries its own
+   * overlay content and a second mark would just be noise. */
+  badge?: "sm" | "lg" | "none";
 }) {
   const h = hashKey(imageKey);
   const variant = h % 2;
@@ -70,13 +78,19 @@ export function CategoryArt({
         src={photoSrc}
         alt={`${category} service`}
         fill
-        sizes="(min-width: 768px) 220px, 96px"
+        sizes={sizes}
+        priority={priority}
         className="object-cover"
         style={{ objectPosition }}
       />
+      {badge !== "none" && (
       <svg
         viewBox="0 0 40 40"
-        className="absolute bottom-1.5 right-1.5 h-7 w-7 drop-shadow-md"
+        className={
+          badge === "lg"
+            ? "absolute bottom-3 right-3 h-10 w-10 drop-shadow-md"
+            : "absolute bottom-1.5 right-1.5 h-7 w-7 drop-shadow-md"
+        }
         aria-hidden="true"
       >
         <circle cx="20" cy="20" r="17" fill="white" fillOpacity="0.88" />
@@ -90,6 +104,7 @@ export function CategoryArt({
         />
         <circle cx={end.x} cy={end.y} r="2" fill="#E1622F" />
       </svg>
+      )}
     </div>
   );
 }

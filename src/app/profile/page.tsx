@@ -146,7 +146,7 @@ export default function ProfilePage() {
         </Section>
 
         <Section title="Notifications">
-          <label className="flex items-center justify-between gap-3 rounded-[var(--radius-lg)] border border-border p-4">
+          <label className="flex items-center justify-between gap-3 rounded-[var(--radius-lg)] bg-surface p-4 shadow-e1">
             <div>
               <p className="text-[14.5px] font-medium text-foreground">Last-minute alerts</p>
               <p className="text-[13px] text-muted-foreground">
