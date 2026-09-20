@@ -75,6 +75,7 @@ export interface Business {
   location: BusinessLocation;
   rating: number; // 1-5
   reviewCount: number;
+  phone: string; // Cyprus format, demo data
   imageKey: string; // key into local placeholder image set
   createdAt: string;
 }

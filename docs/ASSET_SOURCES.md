@@ -5,11 +5,15 @@
 Service card/hero imagery is real photography, downloaded from Unsplash and
 committed locally under `public/images/services/` — not hot-linked, so the
 app never depends on a third-party CDN being reachable at runtime and never
-shows a broken-image icon. Two variants per category (picked deterministically
-per business so the same business always shows the same photo, and
-businesses in the same category don't all show an identical image). Unsplash
-License: free for commercial use, no attribution required — see
-`/docs/RESEARCH.md`.
+shows a broken-image icon. Unsplash License: free for commercial use, no
+attribution required — see `/docs/RESEARCH.md`.
+
+Several variants per category, picked deterministically from a hash of
+**business id + service id**. Keying on the business alone was wrong once
+the cards became photo-first: a salon with three live slots stacked three
+identical full-width photographs down the feed, which is the fastest way to
+make a marketplace look fake. Keying on the service is also the more
+truthful mapping, since what Kenovu lists is a service, not a venue.
 
 | File | Category | Source |
 |---|---|---|
@@ -17,10 +21,14 @@ License: free for commercial use, no attribution required — see
 | `massage-2.jpg` | Massage | https://unsplash.com/photos/SMwCQZWayj0 |
 | `hair-1.jpg` | Hair | https://unsplash.com/photos/wSpkThmoZQc |
 | `hair-2.jpg` | Hair | https://unsplash.com/photos/Xr12kfinkYA |
+| `hair-3.jpg` | Hair | https://unsplash.com/photos/barbers-cutting-hair-in-a-modern-salon-BX8OTlmHOaI |
 | `nails-1.jpg` | Nails | https://unsplash.com/photos/vtQHwU4F13s |
 | `nails-2.jpg` | Nails | https://unsplash.com/photos/gb6gtiTZKB8 |
+| `nails-3.jpg` | Nails | https://unsplash.com/photos/nail-polish-bottles-on-gold-shelves-OpjlRo-31SI |
+| `nails-4.jpg` | Nails | https://unsplash.com/photos/a-persons-hands-with-painted-nails-IYa5Dnj9qWE |
 | `beauty-1.jpg` | Beauty | https://unsplash.com/photos/CqEGy4zAmbI |
 | `beauty-2.jpg` | Beauty | https://unsplash.com/photos/u93nTfWqR9w |
+| `beauty-3.jpg` | Beauty | https://unsplash.com/photos/a-person-receiving-a-facial-treatment-RbIcMsh0NSk |
 
 Nothing is drawn on top of the photo. An earlier version stamped a small
 ring-and-marker badge on each thumbnail whose arc was derived from a hash
@@ -50,3 +58,18 @@ final brand identity.
 
 "Manrope" via `next/font/google` (Google Fonts, OFL-licensed) — no
 self-hosted font files committed.
+
+### Photos considered and rejected
+
+Four more free-tier candidates were downloaded and thrown out rather than
+shipped, because a weak photograph in a photo-first card is worse than a
+repeated good one:
+
+- a massage close-up that cropped to an unreadable patch of skin;
+- a treatment room that read as a clinic waiting area, shot on a phone;
+- a hair salon interior in black and white, which would have looked like a
+  rendering bug next to eleven colour photographs;
+- an out-of-focus abstract of skin, unusable at card size.
+
+Massage therefore still has two variants where the other categories have
+three or four. That asymmetry is deliberate.

@@ -4,8 +4,9 @@ import { cn } from "@/lib/utils";
 /**
  * Floating app header: a translucent material that content scrolls
  * underneath, with a soft scroll edge where the two meet instead of a hard
- * rule. Titles use the display/title tracking from the type scale so they
- * tighten as they grow rather than sitting at web letter-spacing.
+ * rule. The title stays deliberately modest — in a photography-led
+ * marketplace the images carry the hierarchy, and an oversized screen
+ * title just competes with them.
  */
 export function ScreenHeader({
   title,
@@ -38,7 +39,7 @@ export function ScreenHeader({
         )}
       >
         <div className="min-w-0">
-          <h1 className={cn("text-foreground", dense ? "t-headline" : "t-display")}>{title}</h1>
+          <h1 className={cn("text-foreground", dense ? "t-headline" : "t-title")}>{title}</h1>
           {subtitle && (
             <p className={cn("text-muted-foreground", dense ? "t-caption" : "t-subhead mt-0.5")}>
               {subtitle}

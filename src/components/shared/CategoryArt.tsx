@@ -2,25 +2,39 @@ import Image from "next/image";
 import type { ServiceCategory } from "@/domain/types";
 
 // Real photography (Unsplash License — free for commercial use, no
-// attribution required; sources recorded in /docs/ASSET_SOURCES.md). Two
-// variants per category, picked deterministically per business so the same
-// business always shows the same photo and same-category businesses don't
-// all look identical.
+// attribution required; sources recorded in /docs/ASSET_SOURCES.md).
+// Several variants per category, picked deterministically from `imageKey`.
+// Callers key this by business AND service: a salon with three live slots
+// would otherwise stack three identical full-width photographs down the
+// feed, which is the single fastest way to make a marketplace look fake.
 
-const PHOTO_VARIANTS: Record<ServiceCategory, [string, string]> = {
+const PHOTO_VARIANTS: Record<ServiceCategory, string[]> = {
   massage: ["/images/services/massage-1.jpg", "/images/services/massage-2.jpg"],
-  hair: ["/images/services/hair-1.jpg", "/images/services/hair-2.jpg"],
-  nails: ["/images/services/nails-1.jpg", "/images/services/nails-2.jpg"],
-  beauty: ["/images/services/beauty-1.jpg", "/images/services/beauty-2.jpg"],
+  hair: [
+    "/images/services/hair-1.jpg",
+    "/images/services/hair-2.jpg",
+    "/images/services/hair-3.jpg",
+  ],
+  nails: [
+    "/images/services/nails-1.jpg",
+    "/images/services/nails-2.jpg",
+    "/images/services/nails-3.jpg",
+    "/images/services/nails-4.jpg",
+  ],
+  beauty: [
+    "/images/services/beauty-1.jpg",
+    "/images/services/beauty-2.jpg",
+    "/images/services/beauty-3.jpg",
+  ],
 };
 
 // Each photo has a different subject placement, so the crop is chosen per
 // image rather than letting `object-cover` centre-crop faces out of frame.
-const OBJECT_POSITION: Record<ServiceCategory, [string, string]> = {
+const OBJECT_POSITION: Record<ServiceCategory, string[]> = {
   massage: ["center 30%", "center 35%"],
-  hair: ["center 35%", "center 30%"],
-  nails: ["center 55%", "center 50%"],
-  beauty: ["center 45%", "center 55%"],
+  hair: ["center 35%", "center 30%", "center 45%"],
+  nails: ["center 55%", "center 50%", "center 40%", "center 50%"],
+  beauty: ["center 45%", "center 55%", "center 40%"],
 };
 
 function hashKey(key: string): number {
@@ -44,12 +58,13 @@ export function CategoryArt({
    * the LCP it should be, not a late pop-in. */
   priority?: boolean;
 }) {
-  const variant = hashKey(imageKey) % 2;
+  const variants = PHOTO_VARIANTS[category];
+  const variant = hashKey(imageKey) % variants.length;
 
   return (
     <div className={className} style={{ position: "relative", overflow: "hidden" }}>
       <Image
-        src={PHOTO_VARIANTS[category][variant]}
+        src={variants[variant]}
         alt={`${category} service`}
         fill
         sizes={sizes}

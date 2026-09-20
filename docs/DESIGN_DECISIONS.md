@@ -178,3 +178,49 @@ recessed and smaller behind them.
 **Browser-owned surfaces are themed.** Selection, caret, focus ring,
 scrollbar, underline offset and tabular numerals all ship with a default
 that belongs to no design system. They are now drawn from the palette.
+
+## Photography-led marketplace pass
+
+Two reference screens prompted this: a Google local-business panel and the
+Fresha homepage. What they share, and what Kenovu did not have, is that
+**the photograph carries the page**. Kenovu's Discover was a list of rows
+with a 88px thumbnail stapled to the left — competent, and unmistakably a
+web list rather than a marketplace.
+
+Grounded in the Airbnb design system from the `awesome-design-md` library —
+the closest real precedent, since it is the same shape of product: a
+photography-led local marketplace with a save control, a listing detail and
+a booking commit.
+
+**Cards are photo-first.** A 16:9 image with the saving badged on it, the
+heart in the corner, then a short meta block underneath: service, business
+and area, time and countdown, price. Fewer cards fit per screen, which is
+the trade every marketplace in this category makes deliberately.
+
+**Screen titles got quieter.** Airbnb's listing-detail h1 is 22px at weight
+500, and its homepage h1 is smaller than most SaaS pages, because "the
+brand trusts photography and generous whitespace over typographic muscle."
+Kenovu's 31px extra-bold screen title was competing with the images it sits
+above; it is now 23px, and the display step was deleted rather than left
+lying around.
+
+**The slot screen became a listing you can act on**, which is what the
+Google panel does well: one row of Call / Directions / Save / Share sitting
+directly under the rating and distance. `tel:` and a maps query are real
+links; Share uses the Web Share API and falls back to copying the URL.
+
+**"Also at this business"** is a horizontal strip of that business's other
+live slots. It is the honest answer to the empty space the previous QA pass
+accepted: real, bookable inventory rather than an invented map or review
+block, and a genuine second chance to convert someone who likes the salon
+but not that time.
+
+**What was rejected from the references.** Fresha's hero is a lilac-to-pink
+gradient with "302,979 appointments booked today" under the search bar.
+Kenovu's brief bans purple gradients and fake live counters, and quoting a
+booking count to a salon owner in a demo would be a fabricated number shown
+to a real prospect. The `minimalist-ui` and `gpt-taste` skills were also
+not applied here: the first bans Lucide icons and pill buttons and wants an
+editorial serif, the second builds AIDA landing pages with GSAP scroll
+pinning. Both would have overwritten a committed brief with a different
+visual world.

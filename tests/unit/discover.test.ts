@@ -12,6 +12,7 @@ const business: Business = {
   location: { area: "Engomi", addressLine: "", distanceKm: 2 },
   rating: 4.8,
   reviewCount: 126,
+  phone: "+357 22 000 000",
   imageKey: "massage-1",
   createdAt: NOW.toISOString(),
 };

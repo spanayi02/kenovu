@@ -234,13 +234,6 @@ time,
    letter-spacing would be wrong at one end or the other.
    --------------------------------------------------------------------------- */
 
-.t-display {
-  font-size: 1.9375rem; /* 31px */
-  line-height: 1.1;
-  letter-spacing: -0.031em;
-  font-weight: 800;
-}
-
 .t-title {
   font-size: 1.4375rem; /* 23px */
   line-height: 1.18;

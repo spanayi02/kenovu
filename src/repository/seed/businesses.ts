@@ -17,6 +17,7 @@ interface SeedBusinessDef {
   distanceKm: number;
   rating: number;
   reviewCount: number;
+  phone: string;
   imageKey: string;
   services: SeedServiceDef[];
 }
@@ -60,6 +61,7 @@ export const SEED_BUSINESSES: SeedBusinessDef[] = [
     distanceKm: 2.1,
     rating: 4.8,
     reviewCount: 126,
+    phone: "+357 22 458 210",
     imageKey: "massage-1",
     services: MASSAGE_SERVICES,
   },
@@ -73,6 +75,7 @@ export const SEED_BUSINESSES: SeedBusinessDef[] = [
     distanceKm: 4.6,
     rating: 4.7,
     reviewCount: 81,
+    phone: "+357 22 731 904",
     imageKey: "massage-2",
     services: MASSAGE_SERVICES,
   },
@@ -86,6 +89,7 @@ export const SEED_BUSINESSES: SeedBusinessDef[] = [
     distanceKm: 3.4,
     rating: 4.9,
     reviewCount: 214,
+    phone: "+357 22 664 317",
     imageKey: "hair-1",
     services: HAIR_SERVICES,
   },
@@ -99,6 +103,7 @@ export const SEED_BUSINESSES: SeedBusinessDef[] = [
     distanceKm: 1.6,
     rating: 4.6,
     reviewCount: 58,
+    phone: "+357 22 590 128",
     imageKey: "hair-2",
     services: HAIR_SERVICES,
   },
@@ -112,6 +117,7 @@ export const SEED_BUSINESSES: SeedBusinessDef[] = [
     distanceKm: 5.2,
     rating: 4.7,
     reviewCount: 96,
+    phone: "+357 22 812 470",
     imageKey: "hair-3",
     services: HAIR_SERVICES,
   },
@@ -125,6 +131,7 @@ export const SEED_BUSINESSES: SeedBusinessDef[] = [
     distanceKm: 2.8,
     rating: 4.6,
     reviewCount: 142,
+    phone: "+357 22 347 655",
     imageKey: "nails-1",
     services: NAILS_SERVICES,
   },
@@ -138,6 +145,7 @@ export const SEED_BUSINESSES: SeedBusinessDef[] = [
     distanceKm: 3.9,
     rating: 4.5,
     reviewCount: 63,
+    phone: "+357 22 205 883",
     imageKey: "nails-2",
     services: NAILS_SERVICES,
   },
@@ -151,6 +159,7 @@ export const SEED_BUSINESSES: SeedBusinessDef[] = [
     distanceKm: 4.1,
     rating: 4.8,
     reviewCount: 108,
+    phone: "+357 22 918 042",
     imageKey: "beauty-1",
     services: BEAUTY_SERVICES,
   },
@@ -164,6 +173,7 @@ export const SEED_BUSINESSES: SeedBusinessDef[] = [
     distanceKm: 3.0,
     rating: 4.6,
     reviewCount: 74,
+    phone: "+357 22 476 391",
     imageKey: "beauty-2",
     services: BEAUTY_SERVICES,
   },
@@ -177,6 +187,7 @@ export const SEED_BUSINESSES: SeedBusinessDef[] = [
     distanceKm: 3.6,
     rating: 4.9,
     reviewCount: 189,
+    phone: "+357 22 630 759",
     imageKey: "beauty-3",
     services: BEAUTY_SERVICES,
   },
@@ -203,6 +214,7 @@ export function buildBusinessesAndServices(): {
       },
       rating: def.rating,
       reviewCount: def.reviewCount,
+      phone: def.phone,
       imageKey: def.imageKey,
       createdAt: now,
     });
